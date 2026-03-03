@@ -1,0 +1,21 @@
+{
+  "accounts": [
+    {
+      "email": "resident1@barangay.com",
+      "id": "0001",
+      "name": "Juan Dela Cruz",
+      "address": "123 Barangay Street",
+      "contactNumber": "09123456789",
+      "requestIdList": []
+    },
+    {
+      "email": "resident2@barangay.com",
+      "id": "0002",
+      "name": "Ana Santos",
+      "address": "456 Barangay Avenue",
+      "contactNumber": "09987654321",
+      "requestIdList": []
+    }
+  ],
+  "records": []
+}
