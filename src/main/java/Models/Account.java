@@ -1,12 +1,15 @@
 package Models;
 
+import Service.BackendService;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class Account {
+
     private String email;
     private String id;
 
-    public Account() {
-
-    }
+    public Account() { }
 
     public String getEmail() { return email; }
 

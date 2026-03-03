@@ -6,7 +6,12 @@
       "name": "Juan Dela Cruz",
       "address": "123 Barangay Street",
       "contactNumber": "09123456789",
-      "requestIdList": []
+      "userType": "resident",
+      "requestIdList": [
+        "0e9640b6-2696-4600-81a8-d8efe67de762",
+        "60adbad3-8f5b-4190-b8fc-f363d7876334",
+        "7177cadb-21ad-4a0b-8cf3-62d201274ceb"
+      ]
     },
     {
       "email": "resident2@barangay.com",
@@ -14,8 +19,127 @@
       "name": "Ana Santos",
       "address": "456 Barangay Avenue",
       "contactNumber": "09987654321",
-      "requestIdList": []
+      "userType": "resident",
+      "requestIdList": [
+        "e5887f2b-5eb5-4bb8-9ed1-b98f75e8ee8d",
+        "0578a53c-2750-478d-af22-5aae33f2f5d7"
+      ]
+    },
+    {
+      "email": "staff1@barangay.com",
+      "id": "S001",
+      "name": "Jepoy Dizon",
+      "contactNumber": "09223334444",
+      "userType": "staff"
     }
   ],
-  "records": []
+  "records": [
+    {
+      "serviceName": "Business Permit",
+      "serviceTypeId": "2",
+      "residentName": "Juan Dela Cruz",
+      "residentId": "0001",
+      "purpose": "asdasdadasda",
+      "id": "60adbad3-8f5b-4190-b8fc-f363d7876334",
+      "dateCreated": "2026-03-03",
+      "status": "approved",
+      "fee": 100
+    },
+    {
+      "id": "e5887f2b-5eb5-4bb8-9ed1-b98f75e8ee8d",
+      "serviceName": "Barangay Clearance",
+      "serviceTypeId": "1",
+      "residentName": "Ana Santos",
+      "residentId": "0002",
+      "purpose": "asdasdasd",
+      "dateCreated": "2026-03-03",
+      "status": "pending",
+      "fee": 50
+    },
+    {
+      "id": "0578a53c-2750-478d-af22-5aae33f2f5d7",
+      "serviceName": "Business Permit",
+      "serviceTypeId": "2",
+      "residentName": "Ana Santos",
+      "residentId": "0002",
+      "purpose": "adasdadsd",
+      "dateCreated": "2026-03-03",
+      "status": "pending",
+      "fee": 100
+    },
+    {
+      "id": "7177cadb-21ad-4a0b-8cf3-62d201274ceb",
+      "serviceName": "Barangay Clearance",
+      "serviceTypeId": "1",
+      "residentName": "Juan Dela Cruz",
+      "residentId": "0001",
+      "purpose": "Need for job application",
+      "dateCreated": "2026-03-03",
+      "status": "pending",
+      "fee": 50
+    }
+  ],
+  "serviceTypes": [
+    {
+      "serviceTypeId": "1",
+      "name": "Barangay Clearance",
+      "baseFee": 50,
+      "id": "4737"
+    },
+    {
+      "serviceTypeId": "2",
+      "name": "Business Permit",
+      "baseFee": 100,
+      "id": "a612"
+    },
+    {
+      "serviceTypeId": "3",
+      "name": "Complaint",
+      "baseFee": 0,
+      "id": "b385"
+    }
+  ],
+  "requirements": [
+    {
+      "requirementId": "r1",
+      "serviceTypeId": "1",
+      "name": "Valid ID",
+      "description": "Any government-issued ID",
+      "isRequired": true,
+      "id": "1c75"
+    },
+    {
+      "requirementId": "r2",
+      "serviceTypeId": "1",
+      "name": "Application Form",
+      "description": "Filled Barangay Clearance form",
+      "isRequired": true,
+      "id": "d552"
+    },
+    {
+      "requirementId": "r3",
+      "serviceTypeId": "2",
+      "name": "Business Form",
+      "description": "Completed Business Permit form",
+      "isRequired": true,
+      "id": "bc40"
+    },
+    {
+      "requirementId": "r4",
+      "serviceTypeId": "2",
+      "name": "Valid ID",
+      "description": "Owner's government-issued ID",
+      "isRequired": true,
+      "id": "d77d"
+    },
+    {
+      "requirementId": "r5",
+      "serviceTypeId": "3",
+      "name": "Complaint Form",
+      "description": "Describe your complaint",
+      "isRequired": true,
+      "id": "82d8"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

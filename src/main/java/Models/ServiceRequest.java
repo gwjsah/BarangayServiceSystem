@@ -1,41 +1,53 @@
 package Models;
 
 import Models.Enums.RequestStatus;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.UUID;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ServiceRequest {
-    private int serviceTypeId;
+    private String serviceName;
+    private String serviceTypeId;
+    private String residentName;
     private String residentId;
     private String purpose;
-    private String requestId;
+    private String id;
     private String dateCreated;
     private RequestStatus status;
+    private double fee;
 
-    public ServiceRequest(int serviceTypeId, String residentId, String purpose, String dateCreated) {
+    public ServiceRequest() { }
+
+    public ServiceRequest(String serviceName, String serviceTypeId, String residentName, String residentId, String purpose, String dateCreated, double fee) {
+        this.serviceName = serviceName;
         this.serviceTypeId = serviceTypeId;
+        this.residentName = residentName;
         this.residentId = residentId;
         this.purpose = purpose;
-        this.requestId = UUID.randomUUID().toString();
+        this.id = UUID.randomUUID().toString();
         this.dateCreated = dateCreated;
         this.status = RequestStatus.pending;
+        this.fee = fee;
     }
 
     @Override
-    public String  toString() {
+    public String toString() {
         return "ServiceRequest{" +
-                "serviceTypeId=" + serviceTypeId +
+                "serviceName='" + serviceName + '\'' +
+                ", serviceTypeId='" + serviceTypeId + '\'' +
+                ", residentName='" + residentName + '\'' +
                 ", residentId='" + residentId + '\'' +
                 ", purpose='" + purpose + '\'' +
-                ", requestId='" + requestId + '\'' +
+                ", id='" + id + '\'' +
                 ", dateCreated='" + dateCreated + '\'' +
                 ", status=" + status +
+                ", fee=" + fee +
                 '}';
     }
 
-    public int getServiceTypeId() { return serviceTypeId; }
+    public String getServiceTypeId() { return serviceTypeId; }
 
-    public void setServiceTypeId(int serviceTypeId) { this.serviceTypeId = serviceTypeId; }
+    public void setServiceTypeId(String serviceTypeId) { this.serviceTypeId = serviceTypeId; }
 
     public String getResidentId() { return residentId; }
 
@@ -45,9 +57,9 @@ public class ServiceRequest {
 
     public void setPurpose(String purpose) { this.purpose = purpose; }
 
-    public String getRequestId() { return requestId; }
+    public String getId() { return id; }
 
-    public void setRequestId(String requestId) { this.requestId = requestId; }
+    public void setId(String id) { this.id = id; }
 
     public String getDateCreated() { return dateCreated; }
 
@@ -57,4 +69,13 @@ public class ServiceRequest {
 
     public void setStatus(RequestStatus status) { this.status = status; }
 
+    public String getResidentName() { return residentName; }
+
+    public double getFee() { return fee; }
+
+    public void setFee(double fee) { this.fee = fee; }
+
+    public String getServiceName() { return serviceName; }
+
+    public void setServiceName(String serviceName) { this.serviceName = serviceName; }
 }
