@@ -108,7 +108,7 @@ public class Resident extends Account {
 
             System.out.println("Your Requests:");
             for (ServiceRequest s : requests) {
-                System.out.println(s.getServiceName() + " - " + s.getFee());
+                System.out.println(s.getServiceName() + " - " + s.getFee() + " - " + s.getStatus());
             }
 
         } catch (Exception e) {

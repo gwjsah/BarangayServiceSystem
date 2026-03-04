@@ -143,10 +143,8 @@ public final class BackendService {
 
     public static ArrayList<ServiceRequest> getRequestsByResident(String residentId) {
         try {
-            // Adjust this to match your JSON array name
-            String arrayName = "records"; // or "serviceRequests" depending on your db.json
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:3000/" + arrayName))
+                    .uri(URI.create("http://localhost:3000/records"))
                     .GET()
                     .build();
 
@@ -158,6 +156,31 @@ public final class BackendService {
             ArrayList<ServiceRequest> allRequests = mapper.readValue(response.body(), new TypeReference<ArrayList<ServiceRequest>>() {});
 
             ArrayList<ServiceRequest> filtered = allRequests.stream().filter(r -> residentId.equals(r.getResidentId())).collect(Collectors.toCollection(ArrayList::new));
+
+            return filtered;
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
+    }
+
+    public static ArrayList<ServiceRequest> getRequestsByStatus(RequestStatus status) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:3000/records"))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.findAndRegisterModules();
+
+            ArrayList<ServiceRequest> allRequests = mapper.readValue(response.body(), new TypeReference<ArrayList<ServiceRequest>>() {});
+
+            ArrayList<ServiceRequest> filtered = allRequests.stream().filter(r -> status.equals(r.getStatus())).collect(Collectors.toCollection(ArrayList::new));
 
             return filtered;
 
@@ -243,6 +266,30 @@ public final class BackendService {
 
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(response.body(), new TypeReference<ArrayList<ServiceType>>() {});
+    }
+
+    // --- Approval Decision ---
+
+    public static void saveApprovalDecision(ApprovalDecision decision)
+            throws IOException, InterruptedException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        String requestBody = mapper.writeValueAsString(decision);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/approvalDecisions"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 201) {
+            System.out.println("Approval decision saved successfully.");
+        } else {
+            System.out.println("Failed to save approval decision.");
+            System.out.println("Response: " + response.body());
+        }
     }
 
     // --- Auth ---

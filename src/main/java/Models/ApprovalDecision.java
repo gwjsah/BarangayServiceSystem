@@ -1,3 +1,8 @@
+package Models;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ApprovalDecision {
 
     private String decisionId;
@@ -5,6 +10,8 @@ public class ApprovalDecision {
     private String staffName;
     private String decision;   // "Approved" or "Rejected"
     private String remarks;
+
+    public ApprovalDecision() { }
 
     public ApprovalDecision(String decisionId, String serviceRequestId, String staffName) {
         this.decisionId = decisionId;

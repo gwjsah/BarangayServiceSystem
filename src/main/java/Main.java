@@ -6,9 +6,9 @@ public class Main {
     public static void main(String[] args) {
         while(true) {
             System.out.println("Are you a Resident or Staff?");
-            System.out.println("1. Resident");
-            System.out.println("2. Staff");
-            System.out.println("3. Exit");
+            System.out.println("1) Resident");
+            System.out.println("2) Staff");
+            System.out.println("0) Exit");
 
             System.out.print("Select Option: ");
             int choice = new Scanner(System.in).nextInt();
@@ -26,7 +26,7 @@ public class Main {
                         staff.mainMenu();
                     }
                 }
-                case 3 -> System.exit(0);
+                case 0 -> System.exit(0);
                 default -> System.out.println("Invalid option.");
             }
         }
