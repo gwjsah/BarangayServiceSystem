@@ -1,6 +1,11 @@
+package Models;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class RequestValidator {
 
     private String serviceRequestId;
@@ -8,6 +13,8 @@ public class RequestValidator {
     private boolean isValid;
     private String remarks;
     private List<String> missingRequirements;
+
+    public RequestValidator() { }
 
     public RequestValidator(String serviceRequestId) {
         this.serviceRequestId = serviceRequestId;

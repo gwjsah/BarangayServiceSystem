@@ -1,33 +1,30 @@
 {
   "accounts": [
     {
-      "email": "resident1@barangay.com",
+      "email": "resident1@email.com",
       "id": "0001",
       "name": "Juan Dela Cruz",
       "address": "123 Barangay Street",
       "contactNumber": "09123456789",
       "userType": "resident",
       "requestIdList": [
-        "0e9640b6-2696-4600-81a8-d8efe67de762",
-        "60adbad3-8f5b-4190-b8fc-f363d7876334",
-        "7177cadb-21ad-4a0b-8cf3-62d201274ceb",
-        "7c6ace18-0372-4801-8b8e-3a827c37defd"
+        "990ad6e4-52be-4b17-a044-3f19df0cec9d",
+        "133fd3ca-f4f9-4787-a20b-d1a398e78a33"
       ]
     },
     {
-      "email": "resident2@barangay.com",
+      "email": "resident2@email.com",
       "id": "0002",
       "name": "Ana Santos",
       "address": "456 Barangay Avenue",
       "contactNumber": "09987654321",
       "userType": "resident",
       "requestIdList": [
-        "e5887f2b-5eb5-4bb8-9ed1-b98f75e8ee8d",
-        "0578a53c-2750-478d-af22-5aae33f2f5d7"
+        "36582f8e-728a-470f-b08b-6b9013ce981b"
       ]
     },
     {
-      "email": "staff1@barangay.com",
+      "email": "staff1@email.com",
       "id": "S001",
       "name": "Jepoy Dizon",
       "contactNumber": "09223334444",
@@ -40,55 +37,36 @@
       "serviceTypeId": "2",
       "residentName": "Juan Dela Cruz",
       "residentId": "0001",
-      "purpose": "asdasdadasda",
-      "id": "60adbad3-8f5b-4190-b8fc-f363d7876334",
-      "dateCreated": "2026-03-03",
-      "status": "approved",
-      "fee": 100
+      "purpose": "need for business",
+      "id": "990ad6e4-52be-4b17-a044-3f19df0cec9d",
+      "dateCreated": "2026-03-05",
+      "status": "scheduled",
+      "fee": 100,
+      "valid": true
     },
     {
       "serviceName": "Barangay Clearance",
       "serviceTypeId": "1",
-      "residentName": "Ana Santos",
-      "residentId": "0002",
-      "purpose": "asdasdasd",
-      "id": "e5887f2b-5eb5-4bb8-9ed1-b98f75e8ee8d",
-      "dateCreated": "2026-03-03",
-      "status": "rejected",
-      "fee": 50
+      "residentName": "Juan Dela Cruz",
+      "residentId": "0001",
+      "purpose": "need cleareance for business",
+      "id": "133fd3ca-f4f9-4787-a20b-d1a398e78a33",
+      "dateCreated": "2026-03-05",
+      "status": "completed",
+      "fee": 50,
+      "valid": true
     },
     {
       "serviceName": "Business Permit",
       "serviceTypeId": "2",
       "residentName": "Ana Santos",
       "residentId": "0002",
-      "purpose": "adasdadsd",
-      "id": "0578a53c-2750-478d-af22-5aae33f2f5d7",
-      "dateCreated": "2026-03-03",
-      "status": "rejected",
-      "fee": 100
-    },
-    {
-      "id": "7177cadb-21ad-4a0b-8cf3-62d201274ceb",
-      "serviceName": "Barangay Clearance",
-      "serviceTypeId": "1",
-      "residentName": "Juan Dela Cruz",
-      "residentId": "0001",
-      "purpose": "Need for job application",
-      "dateCreated": "2026-03-03",
-      "status": "pending",
-      "fee": 50
-    },
-    {
-      "id": "7c6ace18-0372-4801-8b8e-3a827c37defd",
-      "serviceName": "Barangay Clearance",
-      "serviceTypeId": "1",
-      "residentName": "Juan Dela Cruz",
-      "residentId": "0001",
-      "purpose": "Need barangay clearance",
-      "dateCreated": "2026-03-04",
-      "status": "pending",
-      "fee": 50
+      "purpose": "nedadasd",
+      "id": "36582f8e-728a-470f-b08b-6b9013ce981b",
+      "dateCreated": "2026-03-05",
+      "status": "completed",
+      "fee": 100,
+      "valid": true
     }
   ],
   "serviceTypes": [
@@ -153,14 +131,52 @@
       "id": "82d8"
     }
   ],
-  "approvalDecisions": [
+  "approvalDecisions": [],
+  "requestValidator": [
     {
-      "id": "4df0",
-      "decisionId": "a9c1301e-e9a8-4eaf-989d-845bcf0d61d7",
-      "serviceRequestId": "0578a53c-2750-478d-af22-5aae33f2f5d7",
-      "staffName": "Jepoy Dizon",
-      "decision": "Rejected",
-      "remarks": "Lorem Ipsum"
+      "id": "0bff",
+      "serviceRequestId": "990ad6e4-52be-4b17-a044-3f19df0cec9d",
+      "remarks": "ok",
+      "missingRequirements": [],
+      "valid": true,
+      "complete": true
+    },
+    {
+      "id": "4eb9",
+      "serviceRequestId": "133fd3ca-f4f9-4787-a20b-d1a398e78a33",
+      "remarks": "ok",
+      "missingRequirements": [],
+      "valid": true,
+      "complete": true
+    },
+    {
+      "id": "54b1",
+      "serviceRequestId": "36582f8e-728a-470f-b08b-6b9013ce981b",
+      "remarks": "dfgfdg",
+      "missingRequirements": [],
+      "valid": true,
+      "complete": true
+    }
+  ],
+  "schedules": [
+    {
+      "id": "ea97",
+      "serviceRequestId": "133fd3ca-f4f9-4787-a20b-d1a398e78a33",
+      "residentName": "Juan Dela Cruz",
+      "date": "2026-03-09",
+      "time": "11:45",
+      "location": "Hall",
+      "status": "confirmed",
+      "scheduleId": "e7fa1d87-1d06-4419-ba50-65eee1115910"
+    },
+    {
+      "id": "38ce",
+      "serviceRequestId": "36582f8e-728a-470f-b08b-6b9013ce981b",
+      "residentName": "Ana Santos",
+      "date": "2026-03-07",
+      "time": "9:30",
+      "location": "Hall",
+      "status": "completed"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

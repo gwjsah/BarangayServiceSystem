@@ -1,8 +1,11 @@
 package Models;
 
+import Models.Enums.RequestStatus;
 import Models.Enums.UserType;
 import Service.BackendService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -64,30 +67,31 @@ public class Resident extends Account {
         boolean loggedIn = true;
 
         while (loggedIn) {
-            System.out.println("\n--- Main Menu ---");
-            System.out.println("1. View My Requests");
-            System.out.println("2. Submit New Request");
-            System.out.println("3. Logout");
+            System.out.println("\n--- Resident Dashboard ---");
+            System.out.println("1) View My Requests");
+            System.out.println("2) Submit New Request");
+            System.out.println("3) Balance / Pay Requests");
+            System.out.println("0) Logout");
 
             System.out.print("Select an option: ");
             int option = sc.nextInt();
-            sc.nextLine(); // consume newline
+            sc.nextLine();
 
             switch (option) {
                 case 1:
                     System.out.println("Listing requests for " + this.getName());
-                    // TODO: call BackendService.getReports() and filter by user.getId()
-                    displayReportsByResident(this);
+                    displayReportsByResident();
                     break;
                 case 2:
                     System.out.println("Submitting new request...");
-                    // TODO: implement submitting ServiceRequest
                     submitRequest(this);
-
                     break;
                 case 3:
+                    displayBalanceMenu();
+                    break;
+                case 0:
                     System.out.println("Logging out...");
-                    loggedIn = false;  // break menu loop and go back to loginPage
+                    loggedIn = false;
                     break;
                 default:
                     System.out.println("Invalid option. Try again.");
@@ -95,11 +99,11 @@ public class Resident extends Account {
         }
     }
 
-    public void displayReportsByResident(Resident user) {
+    public void displayReportsByResident() {
 
-        System.out.println("Logged in ID: " + user.getId());
+//        System.out.println("Logged in ID: " + user.getId());
         try {
-            ArrayList<ServiceRequest> requests = BackendService.getRequestsByResident(user.getId());
+            ArrayList<ServiceRequest> requests = BackendService.getRequestsByResident(this.getId());
 
             if (requests.isEmpty()) {
                 System.out.println("No service requests found.");
@@ -107,10 +111,105 @@ public class Resident extends Account {
             }
 
             System.out.println("Your Requests:");
+            int i = 1;
             for (ServiceRequest s : requests) {
-                System.out.println(s.getServiceName() + " - " + s.getFee() + " - " + s.getStatus());
+                System.out.println(i++ + ") " + s.getServiceName() + " - " + s.getFee() + " - " + s.getStatus());
             }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void displayBalanceMenu() {
+        try {
+            ArrayList<ServiceRequest> requests = BackendService.getRequestsByStatusAndResident(this.getId(), RequestStatus.approved);
+
+            if (requests.isEmpty()) {
+                System.out.println("No approved service requests found.");
+                return;
+            }
+
+
+            System.out.println("\n--- Balance Menu ---");
+            System.out.println("Request(s) have been approved and are awaiting payment:");
+            System.out.println("A) Pay All");
+
+            int i = 1;
+            for (ServiceRequest req : requests) {
+                System.out.println(i++ + ") " + req.getServiceName() + " - Fee: " + req.getFee());
+            }
+
+            System.out.print("Select request number to pay, 'A' to pay all, or 0 to return: ");
+            int input = sc.next().charAt(0);
+            sc.nextLine();
+
+            if (input == 'A' || input == 'a') {
+                payAllMenu(requests);
+            } else if (Character.isDigit(input)) {
+                int option = Character.getNumericValue(input);
+
+                if (option > 0 && option <= requests.size()) {
+                    ServiceRequest sr = requests.get(option - 1);
+                    paySingleMenu(sr);
+                } else if (option == 0) {
+                    System.out.println("Returning to previous menu...");
+                } else {
+                    System.out.println("Invalid selection! Please choose a valid number.");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void payAllMenu(ArrayList<ServiceRequest> requests) {
+        try {
+            System.out.println("\n--- Full Payment ---");
+
+            double fullBalance = 0;
+
+            for (ServiceRequest req : requests) {
+                fullBalance += req.getFee();
+            }
+
+            System.out.println("Fee: " + fullBalance);
+            System.out.print("Confirm Payment (Y/N): ");
+            char input = sc.next().charAt(0);
+            sc.nextLine();
+
+            if (Character.toLowerCase(input) == 'y') {
+                System.out.println("Payment Successful! Status updated to Paid");
+                for (ServiceRequest req : requests) {
+                    req.setStatus(RequestStatus.paid);
+                    BackendService.updateServiceRequest(req);
+                }
+            } else {
+                System.out.println("Payment Cancelled. Returning to Main Menu");
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void paySingleMenu(ServiceRequest request) {
+        try {
+            System.out.println("\n--- Single Payment ---");
+            System.out.println("Fee: " + request.getFee());
+            System.out.print("Confirm Payment (Y/N): ");
+            char input = sc.next().charAt(0);
+            sc.nextLine();
+
+            if (Character.toLowerCase(input) == 'y') {
+                System.out.println("Payment Successful! Status updated to Paid");
+                request.setStatus(RequestStatus.paid);
+                BackendService.updateServiceRequest(request);
+            } else {
+                System.out.println("Payment Cancelled. Returning to Main Menu");
+                return;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -123,15 +222,20 @@ public class Resident extends Account {
 
             // display all available services
             ArrayList<ServiceType> services = BackendService.getServiceTypes();
+
+            System.out.println("\n--- Submit Request Menu ---");
             System.out.println("Available Services:");
             for (ServiceType s : services) {
-                System.out.println(s.getServiceTypeId() + ": " + s.getName() + " (Fee: " + s.getBaseFee() + ")");
+                System.out.println(s.getServiceTypeId() + ") " + s.getName() + " (Fee: " + s.getBaseFee() + ")");
             }
+            System.out.println("0) Return");
 
             // Ask resident to select a service
             Scanner sc = new Scanner(System.in);
             System.out.print("Enter Service ID to request: ");
             String selectedServiceId = sc.nextLine();
+
+            if (selectedServiceId.equals("0")) return;
 
             for (ServiceType s : services) {
                 if (selectedServiceId.equals(s.getServiceTypeId())) {

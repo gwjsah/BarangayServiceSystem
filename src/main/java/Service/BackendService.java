@@ -191,6 +191,33 @@ public final class BackendService {
         return new ArrayList<>();
     }
 
+    public static ArrayList<ServiceRequest> getRequestsByStatusAndResident(String residentId, RequestStatus status) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:3000/records"))
+                    .GET()
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.findAndRegisterModules();
+
+            ArrayList<ServiceRequest> allRequests = mapper.readValue(response.body(), new TypeReference<ArrayList<ServiceRequest>>() {});
+
+//            ArrayList<ServiceRequest> filtered = allRequests.stream().filter(r -> status.equals(r.getStatus())).collect(Collectors.toCollection(ArrayList::new));
+
+            ArrayList<ServiceRequest> filtered = allRequests.stream().filter(r -> (residentId == null || residentId.equals(r.getResidentId())) && (status == null || status.equals(r.getStatus()))).collect(Collectors.toCollection(ArrayList::new));
+            return filtered;
+
+
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
+    }
+
     public static void updateRequestStatus(ServiceRequest request, RequestStatus newStatus) {
         try {
             request.setStatus(newStatus);
@@ -212,24 +239,24 @@ public final class BackendService {
         }
     }
 
-    public static void deleteServiceRequest(String title) throws IOException, InterruptedException {
-        String encodedTitle = URLEncoder.encode(title, StandardCharsets.UTF_8.toString());
+    public static boolean deleteServiceRequest(String id)
+            throws IOException, InterruptedException {
+
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/records?title=" + encodedTitle))
-                .GET()
+                .uri(URI.create("http://localhost:3000/records/" + id))
+                .DELETE()
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        ObjectMapper mapper = new ObjectMapper();
-        TypeReference<ArrayList<ServiceRequest>> tr = new TypeReference<ArrayList<ServiceRequest>>() {};
-        ArrayList<ServiceRequest> ServiceRequests = mapper.readValue(response.body(), tr);
 
-        for (ServiceRequest r : ServiceRequests) {
-            HttpRequest delReq = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:3000/records/" + r.getId()))
-                    .DELETE()
-                    .build();
-            client.send(delReq, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() == 200) {
+            System.out.println("Request deleted successfully.");
+            return true;
+        } else {
+            System.out.println("Failed to delete request.");
+            System.out.println("Status: " + response.statusCode());
+            System.out.println("Response: " + response.body());
+            return false;
         }
     }
 
@@ -270,8 +297,7 @@ public final class BackendService {
 
     // --- Approval Decision ---
 
-    public static void saveApprovalDecision(ApprovalDecision decision)
-            throws IOException, InterruptedException {
+    public static void saveApprovalDecision(ApprovalDecision decision) throws IOException, InterruptedException {
 
         ObjectMapper mapper = new ObjectMapper();
         String requestBody = mapper.writeValueAsString(decision);
@@ -290,6 +316,95 @@ public final class BackendService {
             System.out.println("Failed to save approval decision.");
             System.out.println("Response: " + response.body());
         }
+    }
+
+    // --- Request Validation ---
+
+    public static boolean saveRequestValidator(RequestValidator validator) throws IOException, InterruptedException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        String requestBody = mapper.writeValueAsString(validator);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/requestValidator"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                .build();
+
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 201) {
+            System.out.println("Validation saved successfully.");
+            return true;
+        } else {
+            System.out.println("Failed to save validation.");
+            System.out.println("Status: " + response.statusCode());
+            System.out.println("Response: " + response.body());
+            return false;
+        }
+    }
+
+    public static ArrayList<ServiceRequest> getRequestValidators() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/requestValidator"))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new IOException("Failed to fetch request validations");
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(response.body(), new TypeReference<ArrayList<ServiceRequest>>() {});
+    }
+
+    // --- Schedule ---
+
+    public static void saveSchedule(Schedule schedule) throws IOException, InterruptedException {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(schedule);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/schedules"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    public static Schedule getScheduleByRequestId(String requestId) throws IOException, InterruptedException {
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/schedules?serviceRequestId=" + requestId))
+                .GET()
+                .build();
+
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<Schedule> schedules =
+                mapper.readValue(response.body(), new TypeReference<ArrayList<Schedule>>() {});
+
+        return schedules.isEmpty() ? null : schedules.get(0);
+    }
+
+    public static void updateSchedule(Schedule schedule) throws IOException, InterruptedException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(schedule);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/schedules/" + schedule.getId()))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
     // --- Auth ---

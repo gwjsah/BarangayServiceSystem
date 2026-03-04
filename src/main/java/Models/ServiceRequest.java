@@ -15,6 +15,7 @@ public class ServiceRequest {
     private String dateCreated;
     private RequestStatus status;
     private double fee;
+    private boolean isValid;
 
     public ServiceRequest() { }
 
@@ -28,6 +29,7 @@ public class ServiceRequest {
         this.dateCreated = dateCreated;
         this.status = RequestStatus.pending;
         this.fee = fee;
+        this.isValid = false;
     }
 
     @Override
@@ -78,4 +80,8 @@ public class ServiceRequest {
     public String getServiceName() { return serviceName; }
 
     public void setServiceName(String serviceName) { this.serviceName = serviceName; }
+
+    public boolean isValid() { return isValid; }
+
+    public void setValid(boolean valid) { isValid = valid; }
 }

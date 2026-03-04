@@ -5,6 +5,7 @@ import Models.Staff;
 public class Main {
     public static void main(String[] args) {
         while(true) {
+            System.out.println("\n--- Main Menu ---");
             System.out.println("Are you a Resident or Staff?");
             System.out.println("1) Resident");
             System.out.println("2) Staff");
