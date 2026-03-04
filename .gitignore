@@ -27,3 +27,15 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+# Maven
+target/
+
+# Compiled files
+*.class
+*.jar
+
+# IDE
+.vscode/
+.idea/
+*.iml

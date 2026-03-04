@@ -1,4 +1,5 @@
 import java.util.Scanner;
+
 import Models.Resident;
 import Models.Staff;
 
