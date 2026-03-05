@@ -4,10 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RequestValidator {
 
+    private String id;
     private String serviceRequestId;
     private boolean isComplete;
     private boolean isValid;
@@ -17,6 +19,7 @@ public class RequestValidator {
     public RequestValidator() { }
 
     public RequestValidator(String serviceRequestId) {
+        this.id = UUID.randomUUID().toString();
         this.serviceRequestId = serviceRequestId;
         this.isComplete = false;
         this.isValid = false;
@@ -51,4 +54,10 @@ public class RequestValidator {
     public boolean isValid()            { return isValid; }
     public String getRemarks()          { return remarks; }
     public List<String> getMissingRequirements() { return missingRequirements; }
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
 }

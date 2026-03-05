@@ -64,7 +64,7 @@ public final class BackendService {
         if (response.statusCode() != 201) throw new IOException("Failed to create account");
     }
 
-    public static void updateAccount(Resident Resident) throws IOException, InterruptedException {
+    public static void updateResident(Resident Resident) throws IOException, InterruptedException {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(Resident);
 
@@ -239,8 +239,7 @@ public final class BackendService {
         }
     }
 
-    public static boolean deleteServiceRequest(String id)
-            throws IOException, InterruptedException {
+    public static boolean deleteServiceRequest(String id) throws IOException, InterruptedException {
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create("http://localhost:3000/records/" + id))
@@ -249,7 +248,7 @@ public final class BackendService {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        if (response.statusCode() == 200) {
+        if (response.statusCode() == 200 || response.statusCode() == 204) {
             System.out.println("Request deleted successfully.");
             return true;
         } else {
@@ -361,6 +360,40 @@ public final class BackendService {
         return mapper.readValue(response.body(), new TypeReference<ArrayList<ServiceRequest>>() {});
     }
 
+    public static RequestValidator getValidatorByRequestId(String requestId) throws IOException, InterruptedException {
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/requestValidator?serviceRequestId=" + requestId))
+                .GET()
+                .build();
+
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<RequestValidator> reqVal = mapper.readValue(response.body(), new TypeReference<ArrayList<RequestValidator>>() {});
+
+        return reqVal.isEmpty() ? null : reqVal.get(0);
+    }
+
+    public static void deleteValidatorById(String id) throws IOException, InterruptedException {
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/requestValidator/" + id))
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200 || response.statusCode() == 204) {
+            System.out.println("Validator deleted successfully.");
+        } else {
+            System.out.println("Failed to delete validator.");
+            System.out.println("Status: " + response.statusCode());
+            System.out.println("Response: " + response.body());
+        }
+    }
+
     // --- Schedule ---
 
     public static void saveSchedule(Schedule schedule) throws IOException, InterruptedException {
@@ -407,6 +440,69 @@ public final class BackendService {
         client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
+    public static void deleteScheduleById(String id) throws IOException, InterruptedException {
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/schedules/" + id))
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200 || response.statusCode() == 204) {
+            System.out.println("Schedule deleted successfully.");
+        } else {
+            System.out.println("Failed to delete schedule.");
+            System.out.println("Status: " + response.statusCode());
+            System.out.println("Response: " + response.body());
+        }
+    }
+
+    // --- Payment Transaction ---
+
+    public static void savePaymentTransaction(PaymentTransaction pT) throws IOException, InterruptedException {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(pT);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/paymentTransaction"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    public static PaymentTransaction getPaymentTransactionByRequestId(String requestId) throws IOException, InterruptedException {
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/paymentTransaction?serviceRequestId=" + requestId))
+                .GET()
+                .build();
+
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<PaymentTransaction> paymentTransactions = mapper.readValue(response.body(), new TypeReference<ArrayList<PaymentTransaction>>() {});
+
+        return paymentTransactions.isEmpty() ? null : paymentTransactions.get(0);
+    }
+
+    public static void updatePaymentTransaction(PaymentTransaction paymentTransaction) throws IOException, InterruptedException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(paymentTransaction);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/schedules/" + paymentTransaction.getId()))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
     // --- Auth ---
     public static final class Auth {
 
@@ -431,4 +527,5 @@ public final class BackendService {
         }
 
     }
+
 }

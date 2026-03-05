@@ -1,11 +1,11 @@
 package Models;
 
+import Models.Enums.PaymentMethod;
 import Models.Enums.RequestStatus;
 import Models.Enums.UserType;
 import Service.BackendService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -18,9 +18,11 @@ public class Resident extends Account {
     private String address;
     private String contactNumber;
     private UserType userType;
-    protected final ArrayList<String> requestIdList = new ArrayList<>();
+    protected ArrayList<String> requestIdList = new ArrayList<>();
 
     public Resident() { }
+
+    // --- Setters and Getters ---
 
     public String getName() { return name; }
 
@@ -39,6 +41,10 @@ public class Resident extends Account {
     public void setUserType(UserType userType) { this.userType = userType; }
 
     public ArrayList<String> getRequestIdList() { return requestIdList; }
+
+    public void setRequestIdList(ArrayList<String> requestIdList) { this.requestIdList = requestIdList; }
+
+    // --- Resident Features ---
 
     public static Resident loginPage() {
         try {
@@ -166,6 +172,8 @@ public class Resident extends Account {
 
     public void payAllMenu(ArrayList<ServiceRequest> requests) {
         try {
+            PaymentMethod pM;
+
             System.out.println("\n--- Full Payment ---");
 
             double fullBalance = 0;
@@ -175,19 +183,64 @@ public class Resident extends Account {
             }
 
             System.out.println("Fee: " + fullBalance);
+            System.out.print("\nSelect Payment Method\n" +
+                    "1) Cash (Pay at Barangay Hall)\n" +
+                    "2) GCash\n" +
+                    "3) Maya\n" +
+                    "4) Credit Card\n" +
+                    "0) Cancel Payment\n" +
+                    "\n" +
+                    "Select option: ");
+
+            int option = sc.nextInt();
+
+            switch (option) {
+                case 1 -> pM = PaymentMethod.cash;
+                case 2 -> pM = PaymentMethod.gcash;
+                case 3 -> pM = PaymentMethod.paymaya;
+                case 4 -> pM = PaymentMethod.debit_card;
+                case 0 -> {
+                    System.out.println("Payment Cancelled. Returning to Main Menu");
+                    return;
+                }
+                default -> {
+                    System.out.println("Invalid option.");
+                    return;
+                }
+            }
+
+            PaymentTransaction pT = new PaymentTransaction("", fullBalance, pM);
+
             System.out.print("Confirm Payment (Y/N): ");
             char input = sc.next().charAt(0);
             sc.nextLine();
 
             if (Character.toLowerCase(input) == 'y') {
-                System.out.println("Payment Successful! Status updated to Paid");
+                pT.confirmPayment();
+
                 for (ServiceRequest req : requests) {
                     req.setStatus(RequestStatus.paid);
                     BackendService.updateServiceRequest(req);
                 }
+
+                BackendService.savePaymentTransaction(pT);
+
+                System.out.println("Payment Successful! Status updated to Paid");
+
+                System.out.print("Do you want a receipt? (Y/N): ");
+                input = sc.next().charAt(0);
+                sc.nextLine();
+
+                if (Character.toLowerCase(input) == 'y') {
+                    Receipt receipt = new Receipt(pT);
+//                    int transactionId, String processedBy, PaymentMethod method, ArrayList<ServiceRequest> requests
+                    receipt.printReceipt(pT.getId(), "Barangay Office", pM, requests);
+                }
             } else {
+                pT.cancelPayment();
+                BackendService.savePaymentTransaction(pT);
+
                 System.out.println("Payment Cancelled. Returning to Main Menu");
-                return;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -196,19 +249,72 @@ public class Resident extends Account {
 
     public void paySingleMenu(ServiceRequest request) {
         try {
+            PaymentMethod pM;
+
             System.out.println("\n--- Single Payment ---");
+            System.out.println("Request: " + request.getServiceName());
+            System.out.println("Status: " + request.getStatus());
             System.out.println("Fee: " + request.getFee());
+            System.out.print("\nSelect Payment Method\n" +
+                    "1) Cash (Pay at Barangay Hall)\n" +
+                    "2) GCash\n" +
+                    "3) Maya\n" +
+                    "4) Credit Card\n" +
+                    "0) Cancel Payment\n" +
+                    "\n" +
+                    "Select option: ");
+
+            int option = sc.nextInt();
+
+            switch (option) {
+                case 1 -> pM = PaymentMethod.cash;
+                case 2 -> pM = PaymentMethod.gcash;
+                case 3 -> pM = PaymentMethod.paymaya;
+                case 4 -> pM = PaymentMethod.debit_card;
+                case 0 -> {
+                    System.out.println("Payment Cancelled. Returning to Main Menu");
+                    return;
+                }
+                default -> {
+                    System.out.println("Invalid option.");
+                    return;
+                }
+            }
+
+            PaymentTransaction pT = new PaymentTransaction(request.getId(), request.getFee(), pM);
+
             System.out.print("Confirm Payment (Y/N): ");
             char input = sc.next().charAt(0);
             sc.nextLine();
 
             if (Character.toLowerCase(input) == 'y') {
-                System.out.println("Payment Successful! Status updated to Paid");
+                pT.confirmPayment();
+
                 request.setStatus(RequestStatus.paid);
                 BackendService.updateServiceRequest(request);
+
+                BackendService.savePaymentTransaction(pT);
+
+                System.out.println("Payment Successful! Status updated to Paid");
+
+                System.out.print("Do you want a receipt? (Y/N): ");
+                input = sc.next().charAt(0);
+                sc.nextLine();
+
+//                int transactionId, String processedBy, PaymentMethod method, ArrayList<ServiceRequest> requests
+                if (Character.toLowerCase(input) == 'y') {
+                    ArrayList<ServiceRequest> requestList = new ArrayList<>();
+                    requestList.add(request);
+
+                    Receipt receipt = new Receipt(pT);
+//                    int transactionId, String processedBy, PaymentMethod method, ArrayList<ServiceRequest> requests
+                    receipt.printReceipt(pT.getId(), "Barangay Office", pM, requestList);
+                }
             } else {
+                pT.cancelPayment();
+                BackendService.savePaymentTransaction(pT);
+
                 System.out.println("Payment Cancelled. Returning to Main Menu");
-                return;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -263,7 +369,7 @@ public class Resident extends Account {
 
             // Add the id to resident's list
             user.getRequestIdList().add(req.getId());
-            BackendService.updateAccount(user);
+            BackendService.updateResident(user);
 
             System.out.println("Request submitted successfully! Your request ID: " + req.getId());
 

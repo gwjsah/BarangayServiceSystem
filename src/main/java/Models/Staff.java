@@ -85,7 +85,7 @@ public class Staff extends Account {
                     assignCompleteStatus();
                     break;
                 case 6:
-
+                    deleteRequest();
                     break;
                 case 0:
                     System.out.println("Logging out...");
@@ -510,6 +510,86 @@ public class Staff extends Account {
                         System.out.println("Request marked as Completed.");
                     } else if (Character.toLowerCase(input) == 'n') {
                         System.out.println("Completion cancelled. Returning to Menu.");
+                        return;
+                    } else {
+                        System.out.println("Invalid selection.");
+                    }
+
+                } else if (option == 0) {
+                    return;
+                } else {
+                    System.out.println("Invalid selection.");
+                }
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteRequest() {
+        try {
+            while (true) {
+                ArrayList<ServiceRequest> requests = new ArrayList<>();
+
+                requests.addAll(BackendService.getRequestsByStatus(RequestStatus.completed));
+                requests.addAll(BackendService.getRequestsByStatus(RequestStatus.rejected));
+
+                if (requests.isEmpty()) {
+                    System.out.println("No scheduled service requests found.");
+                    return;
+                }
+
+                System.out.println("\n--- Delete Service Request ---");
+                System.out.println("Showing REJECTED and COMPLETED requests only");
+
+                System.out.println("\n   Resident Name - Request Name - Status");
+                int i = 1;
+                for (ServiceRequest s : requests) {
+                    System.out.println(i++ + ") " + s.getResidentName() + " - " + s.getServiceName() + " - " + s.getStatus());
+                }
+
+                System.out.print("Select request number to delete, or 0 to return: ");
+                int option = sc.nextInt();
+                sc.nextLine();
+
+                if (option > 0 && option <= requests.size()) {
+                    System.out.println("You are about to permanently delete:\n");
+                    ServiceRequest sr = requests.get(option - 1);
+                    System.out.println(sr.getServiceName() + " - " + sr.getResidentName() + " - " + sr.getStatus());
+                    System.out.print("\nThis action cannot be undone.\n" + "Confirm deletion? (Y/N): ");
+
+                    char input = sc.next().charAt(0);
+                    sc.nextLine();
+
+                    if (Character.toLowerCase(input) == 'y') {
+                        // Delete refId from resident's list
+                        Resident resident = (Resident) BackendService.getAccountFromId(sr.getResidentId());
+
+                        if (resident != null) {
+                            resident.getRequestIdList().remove(sr.getId());
+                            BackendService.updateResident(resident);
+                        }
+
+                        // Delete Schedule
+                        Schedule sched = BackendService.getScheduleByRequestId(sr.getId());
+                        if (sched != null) {
+                            BackendService.deleteScheduleById(sched.getId());
+                        }
+
+                        // Delete Validation
+                        RequestValidator rV = BackendService.getValidatorByRequestId(sr.getId());
+                        if (rV != null) {
+                            BackendService.deleteValidatorById(rV.getId());
+                        }
+
+                        // Delete Request
+                        BackendService.deleteServiceRequest(sr.getId());
+
+                        System.out.println("Returning to Delete Menu...");
+                    } else if (Character.toLowerCase(input) == 'n') {
+                        System.out.println("Deletion cancelled.\nReturning to menu...");
                         return;
                     } else {
                         System.out.println("Invalid selection.");
