@@ -1,15 +1,25 @@
-public class RequestStatusHistory {
+package Models;
 
-    private String historyId;
-    private String requestId;
-    private String previousStatus;
-    private String newStatus;
+import Models.Enums.RequestStatus;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.UUID;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class StatusHistory {
+
+    private String id;
+    private String serviceRequestId;
+    private RequestStatus previousStatus;
+    private RequestStatus newStatus;
     private String remarks;
     private String changedBy;
 
-    public RequestStatusHistory(String historyId, String requestId, String previousStatus, String newStatus, String remarks, String changedBy) {
-        this.historyId = historyId;
-        this.requestId = requestId;
+    public StatusHistory() { }
+
+    public StatusHistory(String requestId, RequestStatus previousStatus, RequestStatus newStatus, String remarks, String changedBy) {
+        this.id = UUID.randomUUID().toString();
+        this.serviceRequestId = requestId;
         this.previousStatus = previousStatus;
         this.newStatus = newStatus;
         this.remarks = remarks;
@@ -17,38 +27,37 @@ public class RequestStatusHistory {
     }
 
     public void displayHistory() {
-        System.out.println("History ID: " + historyId);
-        System.out.println("Request ID: " + requestId);
+        System.out.println("Request ID: " + serviceRequestId);
         System.out.println("From: " + previousStatus + " → To: " + newStatus);
         System.out.println("Remarks: " + remarks);
         System.out.println("Changed By: " + changedBy);
     }
 
-    public String getHistoryId() {
-        return historyId; 
+    public String getId() {
+        return id;
     }
     public void setHistoryId(String historyId) {
-        this.historyId = historyId; 
+        this.id = historyId;
     }
 
     public String getRequestId() {
-        return requestId; 
+        return serviceRequestId;
     }
     public void setRequestId(String requestId) {
-        this.requestId = requestId; 
+        this.serviceRequestId = requestId;
     }
 
-    public String getPreviousStatus() {
+    public RequestStatus getPreviousStatus() {
         return previousStatus; 
     }
-    public void setPreviousStatus(String previousStatus) {
+    public void setPreviousStatus(RequestStatus previousStatus) {
         this.previousStatus = previousStatus; 
     }
 
-    public String getNewStatus() {
+    public RequestStatus getNewStatus() {
         return newStatus; 
     }
-    public void setNewStatus(String newStatus) {
+    public void setNewStatus(RequestStatus newStatus) {
         this.newStatus = newStatus; 
     }
 

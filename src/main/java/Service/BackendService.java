@@ -482,7 +482,7 @@ public final class BackendService {
         String json = mapper.writeValueAsString(pT);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/paymentTransaction"))
+                .uri(URI.create("http://localhost:3000/paymentTransactions"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(json))
                 .build();
@@ -493,7 +493,7 @@ public final class BackendService {
     public static PaymentTransaction getPaymentTransactionByRequestId(String requestId) throws IOException, InterruptedException {
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/paymentTransaction?serviceRequestId=" + requestId))
+                .uri(URI.create("http://localhost:3000/paymentTransactions?serviceRequestId=" + requestId))
                 .GET()
                 .build();
 
@@ -518,6 +518,91 @@ public final class BackendService {
                 .build();
 
         client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    // --- StatusHistory ---
+
+    public static void saveStatusHistory(StatusHistory sH) throws IOException, InterruptedException {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(sH);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/statusHistory"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    public static StatusHistory getStatusHistoryByRequestId(String requestId) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/statusHistory?serviceRequestId=" + requestId))
+                .GET()
+                .build();
+
+        HttpResponse<String> response =
+                client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<StatusHistory> statusHistories = mapper.readValue(response.body(), new TypeReference<ArrayList<StatusHistory>>() {});
+
+        return statusHistories.isEmpty() ? null : statusHistories.get(0);
+    }
+
+    public static ArrayList<StatusHistory> getStatusHistoriesByRequestId(String requestId) throws IOException, InterruptedException {
+        // Fetch all requirements from JSON server
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/statusHistory"))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayList<StatusHistory> allStatusHistory = mapper.readValue(response.body(), new TypeReference<ArrayList<StatusHistory>>() {});
+
+        // Filter by serviceTypeId
+        ArrayList<StatusHistory> filtered = new ArrayList<>();
+        for (StatusHistory sH : allStatusHistory) {
+            if (sH.getRequestId().equals(requestId)) {
+                filtered.add(sH);
+            }
+        }
+
+        return filtered;
+    }
+
+    public static void updateStatusHistory(StatusHistory sH) throws IOException, InterruptedException {
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(sH);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/statusHistory/" + sH.getId()))
+                .header("Content-Type", "application/json")
+                .PUT(HttpRequest.BodyPublishers.ofString(json))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) throw new IOException("Failed to update StatusHistory");
+    }
+
+    public static void deleteStatusHistoryByRequestId(String id) throws IOException, InterruptedException {
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/statusHistory?serviceRequestId=" + id))
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() == 200 || response.statusCode() == 204) {
+            System.out.println("StatusHistory deleted successfully.");
+        } else {
+            System.out.println("Failed to delete StatusHistory.");
+            System.out.println("Status: " + response.statusCode());
+            System.out.println("Response: " + response.body());
+        }
     }
 
     // --- Auth ---

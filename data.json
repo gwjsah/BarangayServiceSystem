@@ -10,7 +10,10 @@
       "requestIdList": [
         "2b6e3f53-6ec2-40d7-b0e8-1d0ec28fe3ac",
         "4040ba34-4441-45c5-8ca2-517489b26035",
-        "909978c3-bcd5-4c75-ad13-fd9eea53e98d"
+        "909978c3-bcd5-4c75-ad13-fd9eea53e98d",
+        "09c714ab-e603-4c18-bd5c-58ba8b72bb21",
+        "bbebe838-60f6-4c67-81a8-984dfa79af6e",
+        "779fc3a1-72f0-4e38-b8ab-3d0414b931cc"
       ]
     },
     {
@@ -66,6 +69,42 @@
       "status": "rejected",
       "fee": 100,
       "valid": false
+    },
+    {
+      "serviceName": "Business Permit",
+      "serviceTypeId": "2",
+      "residentName": "Juan Dela Cruz",
+      "residentId": "0001",
+      "purpose": "asdassa",
+      "id": "09c714ab-e603-4c18-bd5c-58ba8b72bb21",
+      "dateCreated": "2026-03-09",
+      "status": "rejected",
+      "fee": 100,
+      "valid": false
+    },
+    {
+      "id": "bbebe838-60f6-4c67-81a8-984dfa79af6e",
+      "serviceName": "Business Permit",
+      "serviceTypeId": "2",
+      "residentName": "Juan Dela Cruz",
+      "residentId": "0001",
+      "purpose": "asdasas",
+      "dateCreated": "2026-03-09",
+      "status": "pending",
+      "fee": 100,
+      "valid": false
+    },
+    {
+      "serviceName": "Business Permit",
+      "serviceTypeId": "2",
+      "residentName": "Juan Dela Cruz",
+      "residentId": "0001",
+      "purpose": "asdasds",
+      "id": "779fc3a1-72f0-4e38-b8ab-3d0414b931cc",
+      "dateCreated": "2026-03-09",
+      "status": "completed",
+      "fee": 100,
+      "valid": true
     }
   ],
   "serviceTypes": [
@@ -157,6 +196,24 @@
       ],
       "complete": false,
       "valid": true
+    },
+    {
+      "id": "e829212b-d893-4f01-8798-7af46770d5b9",
+      "serviceRequestId": "09c714ab-e603-4c18-bd5c-58ba8b72bb21",
+      "remarks": "Provide Valid ID",
+      "missingRequirements": [
+        "Business Form"
+      ],
+      "valid": true,
+      "complete": false
+    },
+    {
+      "id": "8eb95ef7-9cad-4616-88c1-701c766e5b01",
+      "serviceRequestId": "779fc3a1-72f0-4e38-b8ab-3d0414b931cc",
+      "remarks": "Proceed to Payment",
+      "missingRequirements": [],
+      "valid": true,
+      "complete": true
     }
   ],
   "schedules": [
@@ -179,9 +236,19 @@
       "location": "Barangay Hall",
       "status": "confirmed",
       "serviceName": "Barangay Clearance"
+    },
+    {
+      "id": "8c7f7b9e-e190-4815-810f-e6c2d9ba6dd9",
+      "serviceRequestId": "779fc3a1-72f0-4e38-b8ab-3d0414b931cc",
+      "residentName": "Juan Dela Cruz",
+      "date": "2026-03-10",
+      "time": "10:30",
+      "location": "Barangay Hall",
+      "status": "completed",
+      "serviceName": "Business Permit"
     }
   ],
-  "paymentTransaction": [
+  "paymentTransactions": [
     {
       "id": "2a26705a-a59e-411c-b485-3ee0decc74f6",
       "serviceRequestId": "",
@@ -277,6 +344,61 @@
       "paymentMethod": "gcash",
       "paymentStatus": "paid",
       "paidDate": "2026-03-08"
+    },
+    {
+      "id": "cd63920e-db31-4ba2-b18c-5f57e81f85db",
+      "serviceRequestId": "779fc3a1-72f0-4e38-b8ab-3d0414b931cc",
+      "amountPaid": 100,
+      "paymentMethod": "gcash",
+      "paymentStatus": "paid",
+      "paidDate": "2026-03-09"
+    }
+  ],
+  "statusHistory": [
+    {
+      "id": "7558",
+      "previousStatus": null,
+      "newStatus": "pending",
+      "remarks": "New request added.",
+      "changedBy": "Juan Dela Cruz",
+      "historyId": "bfe300bd-d278-4d73-9f25-bfbcb83c5756",
+      "requestId": "779fc3a1-72f0-4e38-b8ab-3d0414b931cc"
+    },
+    {
+      "id": "73e2",
+      "previousStatus": "pending",
+      "newStatus": "approved",
+      "remarks": "Request approved.",
+      "changedBy": "Jepoy Dizon",
+      "historyId": "029ef42b-a465-483b-8ee4-76e57a129581",
+      "requestId": "779fc3a1-72f0-4e38-b8ab-3d0414b931cc"
+    },
+    {
+      "id": "2436",
+      "previousStatus": "approved",
+      "newStatus": "paid",
+      "remarks": "Request paid by resident.",
+      "changedBy": "Juan Dela Cruz",
+      "historyId": "81b25fff-2c8a-4dc6-b563-6133d21bbf31",
+      "requestId": "779fc3a1-72f0-4e38-b8ab-3d0414b931cc"
+    },
+    {
+      "id": "3e2c",
+      "previousStatus": "paid",
+      "newStatus": "scheduled",
+      "remarks": "Request scheduled.",
+      "changedBy": "Jepoy Dizon",
+      "historyId": "87a916d1-0a38-41c1-8126-ff358be471cf",
+      "requestId": "779fc3a1-72f0-4e38-b8ab-3d0414b931cc"
+    },
+    {
+      "id": "31d8",
+      "previousStatus": "scheduled",
+      "newStatus": "completed",
+      "remarks": "Request completed.",
+      "changedBy": "Jepoy Dizon",
+      "historyId": "b982a9a2-7580-44c8-8604-641fd6860886",
+      "requestId": "779fc3a1-72f0-4e38-b8ab-3d0414b931cc"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

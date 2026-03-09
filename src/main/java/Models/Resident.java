@@ -82,6 +82,7 @@ public class Resident extends Account {
             System.out.println("2) Submit New Request");
             System.out.println("3) Balance / Pay Requests");
             System.out.println("4) View Scheduled Request");
+            System.out.println("5) View Rejected Request");
             System.out.println("0) Logout");
 
             try {
@@ -107,6 +108,9 @@ public class Resident extends Account {
                     break;
                 case 4:
                     viewScheduledRequest();
+                    break;
+                case 5:
+                    viewRejectedRequest();
                     break;
                 case 0:
                     System.out.println("Logging out...");
@@ -312,6 +316,9 @@ public class Resident extends Account {
                 input = sc.next().charAt(0);
                 sc.nextLine();
 
+                StatusHistory sH = new StatusHistory(request.getId(), RequestStatus.approved, RequestStatus.paid, "Request paid by resident.", this.getName());
+                BackendService.saveStatusHistory(sH);
+
 //                int transactionId, String processedBy, PaymentMethod method, ArrayList<ServiceRequest> requests
                 if (Character.toLowerCase(input) == 'y') {
                     ArrayList<ServiceRequest> requestList = new ArrayList<>();
@@ -382,6 +389,9 @@ public class Resident extends Account {
             user.getRequestIdList().add(req.getId());
             BackendService.updateResident(user);
 
+            StatusHistory sH = new StatusHistory(req.getId(), null, RequestStatus.pending, "New request added.", this.getName());
+            BackendService.saveStatusHistory(sH);
+
             System.out.println("Request submitted successfully! Your request ID: " + req.getId());
 
         } catch (Exception e) {
@@ -407,6 +417,43 @@ public class Resident extends Account {
             }
 
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void viewRejectedRequest() {
+        try {
+            ArrayList<ServiceRequest> requests = BackendService.getRequestsByStatus(RequestStatus.rejected);
+
+            if (requests.isEmpty()) {
+                System.out.println("No scheduled requests found.");
+                return;
+            }
+
+            System.out.println("Rejected Requests:");
+
+            System.out.println("   Request Name - Status - Date Reported");
+            int i = 1;
+            for (ServiceRequest sR : requests) {
+                System.out.println(i++ + ") " + " - " + sR.getServiceName() + " - " + sR.getStatus() + " - " + sR.getDateCreated());
+            }
+
+            System.out.print("Select request number to view details, or 0 to return: ");
+            int option = sc.nextInt();
+            sc.nextLine();
+
+            if (option > 0 && option <= requests.size()) {
+                ServiceRequest sR = requests.get(option - 1);
+                RequestValidator rQ = BackendService.getValidatorByRequestId(sR.getId());
+
+                System.out.println("\nRequest Details: ");
+                rQ.printSummary();
+            } else if (option == 0) {
+                return;
+            } else {
+                System.out.println("Invalid selection.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

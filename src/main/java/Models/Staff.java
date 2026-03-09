@@ -383,10 +383,16 @@ public class Staff extends Account {
                 request.setStatus(RequestStatus.rejected);
                 BackendService.updateServiceRequest(request);
                 System.out.println("Request automatically rejected.");
+
+                StatusHistory sH = new StatusHistory(request.getId(), RequestStatus.pending, RequestStatus.rejected, "Request rejected.", this.getName());
+                BackendService.saveStatusHistory(sH);
             } else {
                 request.setValid(true);
                 request.setStatus(RequestStatus.approved);
                 BackendService.updateServiceRequest(request);
+
+                StatusHistory sH = new StatusHistory(request.getId(), RequestStatus.pending, RequestStatus.approved, "Request approved.", this.getName());
+                BackendService.saveStatusHistory(sH);
             }
 
             BackendService.saveRequestValidator(validator);
@@ -459,6 +465,9 @@ public class Staff extends Account {
 
             System.out.println("Schedule assigned successfully!");
 
+            StatusHistory sH = new StatusHistory(request.getId(), RequestStatus.paid, RequestStatus.scheduled, "Request scheduled.", this.getName());
+            BackendService.saveStatusHistory(sH);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -508,6 +517,9 @@ public class Staff extends Account {
                         }
 
                         System.out.println("Request marked as Completed.");
+
+                        StatusHistory sH = new StatusHistory(sr.getId(), RequestStatus.scheduled, RequestStatus.completed, "Request completed.", this.getName());
+                        BackendService.saveStatusHistory(sH);
                     } else if (Character.toLowerCase(input) == 'n') {
                         System.out.println("Completion cancelled. Returning to Menu.");
                         return;
