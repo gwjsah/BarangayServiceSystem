@@ -448,7 +448,7 @@ public class Staff extends Account {
             System.out.print("Enter location: ");
             String location = sc.nextLine();
 
-            Schedule schedule = new Schedule(UUID.randomUUID().toString(), request.getId(), request.getResidentName(), date, time, location);
+            Schedule schedule = new Schedule(UUID.randomUUID().toString(), request.getId(), request.getResidentName(), date, time, location, request.getServiceName());
 
             schedule.confirm();
 

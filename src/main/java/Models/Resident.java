@@ -7,6 +7,7 @@ import Service.BackendService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
@@ -64,8 +65,9 @@ public class Resident extends Account {
                 System.out.println("Invalid login: Not a Resident account.");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Invalid login: Not a Resident account.");
         }
+
         return null;
     }
 
@@ -73,15 +75,23 @@ public class Resident extends Account {
         boolean loggedIn = true;
 
         while (loggedIn) {
+            int option = -1;
+
             System.out.println("\n--- Resident Dashboard ---");
             System.out.println("1) View My Requests");
             System.out.println("2) Submit New Request");
             System.out.println("3) Balance / Pay Requests");
+            System.out.println("4) View Scheduled Request");
             System.out.println("0) Logout");
 
-            System.out.print("Select an option: ");
-            int option = sc.nextInt();
-            sc.nextLine();
+            try {
+                System.out.print("Select an option: ");
+                option = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a number.");
+                sc.nextLine();
+            }
 
             switch (option) {
                 case 1:
@@ -95,12 +105,13 @@ public class Resident extends Account {
                 case 3:
                     displayBalanceMenu();
                     break;
+                case 4:
+                    viewScheduledRequest();
+                    break;
                 case 0:
                     System.out.println("Logging out...");
                     loggedIn = false;
                     break;
-                default:
-                    System.out.println("Invalid option. Try again.");
             }
         }
     }
@@ -234,7 +245,7 @@ public class Resident extends Account {
                 if (Character.toLowerCase(input) == 'y') {
                     Receipt receipt = new Receipt(pT);
 //                    int transactionId, String processedBy, PaymentMethod method, ArrayList<ServiceRequest> requests
-                    receipt.printReceipt(pT.getId(), "Barangay Office", pM, requests);
+                    receipt.printReceipt( "Barangay Office", requests);
                 }
             } else {
                 pT.cancelPayment();
@@ -308,7 +319,7 @@ public class Resident extends Account {
 
                     Receipt receipt = new Receipt(pT);
 //                    int transactionId, String processedBy, PaymentMethod method, ArrayList<ServiceRequest> requests
-                    receipt.printReceipt(pT.getId(), "Barangay Office", pM, requestList);
+                    receipt.printReceipt("Barangay Office", requestList);
                 }
             } else {
                 pT.cancelPayment();
@@ -372,6 +383,29 @@ public class Resident extends Account {
             BackendService.updateResident(user);
 
             System.out.println("Request submitted successfully! Your request ID: " + req.getId());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void viewScheduledRequest() {
+
+        try {
+            ArrayList<Schedule> requests = BackendService.getScheduleByResidentName(this.getName());
+
+            if (requests.isEmpty()) {
+                System.out.println("No scheduled requests found.");
+                return;
+            }
+
+            System.out.println("\nScheduled Request:");
+
+            for (Schedule s : requests) {
+                s.printSlip();
+                System.out.println();
+            }
+
 
         } catch (Exception e) {
             e.printStackTrace();

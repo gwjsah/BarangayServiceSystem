@@ -458,6 +458,23 @@ public final class BackendService {
         }
     }
 
+    public static ArrayList<Schedule> getScheduleByResidentName(String name) throws IOException, InterruptedException {
+        String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8.toString());
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:3000/schedules?residentName=" + encodedName))
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<ArrayList<Schedule>> tr = new TypeReference<ArrayList<Schedule>>() {};
+        ArrayList<Schedule> Schedules = mapper.readValue(response.body(), tr);
+
+        if (Schedules.isEmpty()) throw new IOException("No schedule(s) found");
+        return Schedules;
+    }
+
     // --- Payment Transaction ---
 
     public static void savePaymentTransaction(PaymentTransaction pT) throws IOException, InterruptedException {
@@ -507,8 +524,7 @@ public final class BackendService {
     public static final class Auth {
 
         // Generic login for both types
-        public static Account loginAccount(String id, String email, UserType expectedType)
-                throws IOException, InterruptedException {
+        public static Account loginAccount(String id, String email, UserType expectedType) throws IOException, InterruptedException {
 
             Account account = getAccountFromId(id);  // fetch account by ID
             if (account == null) return null;        // account not found

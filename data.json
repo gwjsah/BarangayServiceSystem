@@ -8,7 +8,9 @@
       "contactNumber": "09123456789",
       "userType": "resident",
       "requestIdList": [
-        "c6d9ac73-7c4c-458a-bbc0-236dc29341d1"
+        "2b6e3f53-6ec2-40d7-b0e8-1d0ec28fe3ac",
+        "4040ba34-4441-45c5-8ca2-517489b26035",
+        "909978c3-bcd5-4c75-ad13-fd9eea53e98d"
       ]
     },
     {
@@ -18,11 +20,7 @@
       "address": "456 Barangay Avenue",
       "contactNumber": "09987654321",
       "userType": "resident",
-      "requestIdList": [
-        "d6ef3cd1-5c8d-4860-a476-b54312163eea",
-        "801f4f9b-25b0-42aa-92e8-840f6a249eec",
-        "3e18f97c-8d68-49a7-bfe8-4c1fc1d15c9d"
-      ]
+      "requestIdList": []
     },
     {
       "email": "staff1@email.com",
@@ -34,52 +32,40 @@
   ],
   "records": [
     {
-      "serviceName": "Barangay Clearance",
-      "serviceTypeId": "1",
+      "serviceName": "Business Permit",
+      "serviceTypeId": "2",
       "residentName": "Juan Dela Cruz",
       "residentId": "0001",
-      "purpose": "adas",
-      "id": "c6d9ac73-7c4c-458a-bbc0-236dc29341d1",
-      "dateCreated": "2026-03-05",
-      "status": "completed",
-      "fee": 50,
+      "purpose": "sadasd",
+      "id": "2b6e3f53-6ec2-40d7-b0e8-1d0ec28fe3ac",
+      "dateCreated": "2026-03-08",
+      "status": "scheduled",
+      "fee": 100,
       "valid": true
     },
     {
       "serviceName": "Barangay Clearance",
       "serviceTypeId": "1",
-      "residentName": "Ana Santos",
-      "residentId": "0002",
-      "purpose": "asdas",
-      "id": "d6ef3cd1-5c8d-4860-a476-b54312163eea",
-      "dateCreated": "2026-03-05",
-      "status": "paid",
+      "residentName": "Juan Dela Cruz",
+      "residentId": "0001",
+      "purpose": "asdasd",
+      "id": "4040ba34-4441-45c5-8ca2-517489b26035",
+      "dateCreated": "2026-03-08",
+      "status": "scheduled",
       "fee": 50,
       "valid": true
     },
     {
       "serviceName": "Business Permit",
       "serviceTypeId": "2",
-      "residentName": "Ana Santos",
-      "residentId": "0002",
-      "purpose": "asdasdas",
-      "id": "801f4f9b-25b0-42aa-92e8-840f6a249eec",
-      "dateCreated": "2026-03-05",
-      "status": "paid",
+      "residentName": "Juan Dela Cruz",
+      "residentId": "0001",
+      "purpose": "asdasd",
+      "id": "909978c3-bcd5-4c75-ad13-fd9eea53e98d",
+      "dateCreated": "2026-03-08",
+      "status": "rejected",
       "fee": 100,
-      "valid": true
-    },
-    {
-      "serviceName": "Complaint",
-      "serviceTypeId": "3",
-      "residentName": "Ana Santos",
-      "residentId": "0002",
-      "purpose": "adasdadas",
-      "id": "3e18f97c-8d68-49a7-bfe8-4c1fc1d15c9d",
-      "dateCreated": "2026-03-05",
-      "status": "paid",
-      "fee": 0,
-      "valid": true
+      "valid": false
     }
   ],
   "serviceTypes": [
@@ -147,47 +133,52 @@
   "approvalDecisions": [],
   "requestValidator": [
     {
-      "id": "a190413b-e6df-4f60-8320-6207ff8ef7ec",
-      "serviceRequestId": "c6d9ac73-7c4c-458a-bbc0-236dc29341d1",
-      "remarks": "adas",
+      "id": "5902e013-01f0-4d67-aef1-29e6b2ebb66d",
+      "serviceRequestId": "2b6e3f53-6ec2-40d7-b0e8-1d0ec28fe3ac",
+      "remarks": "dasdad",
       "missingRequirements": [],
       "valid": true,
       "complete": true
     },
     {
-      "id": "7dc90af4-19e0-4bfc-a9b5-283fe72661d9",
-      "serviceRequestId": "d6ef3cd1-5c8d-4860-a476-b54312163eea",
-      "remarks": "ad",
+      "id": "270a6f31-6319-4201-a854-ca3dc197597d",
+      "serviceRequestId": "4040ba34-4441-45c5-8ca2-517489b26035",
+      "remarks": "asdads",
       "missingRequirements": [],
       "valid": true,
       "complete": true
     },
     {
-      "id": "9ab05e52-9663-4bed-928f-91993fe934a5",
-      "serviceRequestId": "801f4f9b-25b0-42aa-92e8-840f6a249eec",
-      "remarks": "adasd",
-      "missingRequirements": [],
-      "valid": true,
-      "complete": true
-    },
-    {
-      "id": "a3cb2163-446f-4232-8771-c829b3dca3d9",
-      "serviceRequestId": "3e18f97c-8d68-49a7-bfe8-4c1fc1d15c9d",
-      "remarks": "asdasd",
-      "missingRequirements": [],
-      "valid": true,
-      "complete": true
+      "id": "314c6527-cc11-4511-992a-49060ae02f4a",
+      "serviceRequestId": "909978c3-bcd5-4c75-ad13-fd9eea53e98d",
+      "remarks": "Provide a Valid ID",
+      "missingRequirements": [
+        "Business Form"
+      ],
+      "complete": false,
+      "valid": true
     }
   ],
   "schedules": [
     {
-      "id": "db7d4da0-b88a-4c61-bfde-0a4f471adcef",
-      "serviceRequestId": "c6d9ac73-7c4c-458a-bbc0-236dc29341d1",
+      "id": "78dd93a1-5a06-461a-b8a7-482d242a4d19",
+      "serviceRequestId": "2b6e3f53-6ec2-40d7-b0e8-1d0ec28fe3ac",
       "residentName": "Juan Dela Cruz",
-      "date": "2026-03-07",
+      "date": "2026-03-10",
+      "time": "10:45",
+      "location": "Barangay Hall",
+      "status": "confirmed",
+      "serviceName": "Business Permit"
+    },
+    {
+      "id": "97d48e2d-1bca-4de6-8c36-db5b8796416c",
+      "serviceRequestId": "4040ba34-4441-45c5-8ca2-517489b26035",
+      "residentName": "Juan Dela Cruz",
+      "date": "2026-03-10",
       "time": "10:30",
       "location": "Barangay Hall",
-      "status": "completed"
+      "status": "confirmed",
+      "serviceName": "Barangay Clearance"
     }
   ],
   "paymentTransaction": [
@@ -214,6 +205,78 @@
       "paymentMethod": "gcash",
       "paymentStatus": "paid",
       "paidDate": "2026-03-05"
+    },
+    {
+      "id": "65b45d3c-5895-4d4a-af43-5f11ce8c4eb8",
+      "serviceRequestId": "dae7387c-682f-4f78-b1a4-7fa30725e6eb",
+      "amountPaid": 100,
+      "paymentMethod": "gcash",
+      "paymentStatus": "paid",
+      "paidDate": "2026-03-05"
+    },
+    {
+      "id": "1fb8c46d-41c4-4738-8846-cf31e28411ea",
+      "serviceRequestId": "df5d57e7-4e1f-49da-8faf-07cda1e97b25",
+      "amountPaid": 50,
+      "paymentMethod": "gcash",
+      "paymentStatus": "paid",
+      "paidDate": "2026-03-06"
+    },
+    {
+      "id": "d9b8256c-6c2d-4436-a9b3-5e361a919678",
+      "serviceRequestId": "",
+      "amountPaid": 100,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "paidDate": "2026-03-06"
+    },
+    {
+      "id": "d879ae11-9253-4324-b333-a7478f7755de",
+      "serviceRequestId": "cdff54d1-eba7-44ab-9051-dcba74dd14b8",
+      "amountPaid": 50,
+      "paymentMethod": "gcash",
+      "paymentStatus": "paid",
+      "paidDate": "2026-03-08"
+    },
+    {
+      "id": "d8738807-0b3b-429c-9219-0f74b2c1ec65",
+      "serviceRequestId": "",
+      "amountPaid": 100,
+      "paymentMethod": "gcash",
+      "paymentStatus": "paid",
+      "paidDate": "2026-03-08"
+    },
+    {
+      "id": "42f2c958-a290-4742-b050-6c15f263153b",
+      "serviceRequestId": "e0c72e4d-dbe6-4946-b62d-e0935002d062",
+      "amountPaid": 100,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "paidDate": "2026-03-08"
+    },
+    {
+      "id": "d0da9345-2fda-402d-a8b7-2236f9274141",
+      "serviceRequestId": "c44b0630-1211-46ac-bd37-83c2973ef45e",
+      "amountPaid": 100,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "paidDate": "2026-03-08"
+    },
+    {
+      "id": "7b5f6de1-4cc0-490d-905f-f8bee581c94f",
+      "serviceRequestId": "2b6e3f53-6ec2-40d7-b0e8-1d0ec28fe3ac",
+      "amountPaid": 100,
+      "paymentMethod": "cash",
+      "paymentStatus": "paid",
+      "paidDate": "2026-03-08"
+    },
+    {
+      "id": "ee89a587-a362-4a0a-8419-8d3d87a646ef",
+      "serviceRequestId": "4040ba34-4441-45c5-8ca2-517489b26035",
+      "amountPaid": 50,
+      "paymentMethod": "gcash",
+      "paymentStatus": "paid",
+      "paidDate": "2026-03-08"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

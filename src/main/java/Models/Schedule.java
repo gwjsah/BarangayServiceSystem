@@ -13,10 +13,11 @@ public class Schedule {
     private String time;
     private String location;
     private ScheduleStatus status;
+    private String serviceName;
 
     public Schedule() { }
 
-    public Schedule(String id, String serviceRequestId, String residentName, String date, String time, String location) {
+    public Schedule(String id, String serviceRequestId, String residentName, String date, String time, String location, String serviceName) {
         this.id = id;
         this.serviceRequestId = serviceRequestId;
         this.residentName = residentName;
@@ -24,6 +25,7 @@ public class Schedule {
         this.time = time;
         this.location = location;
         this.status = ScheduleStatus.pending;
+        this.serviceName = serviceName;
     }
 
     public void confirm() {
@@ -49,8 +51,8 @@ public class Schedule {
     }
 
     public void printSlip() {
-        System.out.println("Schedule ID  : " + id);
         System.out.println("Request ID   : " + serviceRequestId);
+        System.out.println("Service Name : " + serviceName);
         System.out.println("Resident     : " + residentName);
         System.out.println("Date         : " + date);
         System.out.println("Time         : " + time);
@@ -64,9 +66,10 @@ public class Schedule {
     public String getDate()             { return date; }
     public String getTime()             { return time; }
     public String getLocation()         { return location; }
-    public ScheduleStatus getStatus()           { return status; }
-
+    public ScheduleStatus getStatus()   { return status; }
     public void setDate(String date)     { this.date = date; }
     public void setTime(String time)     { this.time = time; }
     public void setStatus(ScheduleStatus status) { this.status = status; }
+    public String getServiceName() { return serviceName; }
+    public void setServiceName(String serviceName) { this.serviceName = serviceName; }
 }

@@ -9,31 +9,24 @@ import java.util.ArrayList;
 public class Receipt {
 
 //    private String receiptNo;
-    private PaymentTransaction paymentTransaction;
+    private PaymentTransaction pT;
 
-    private LocalDateTime printedDate;
+    private final LocalDateTime printedDate;
 
     public Receipt(PaymentTransaction paymentTransaction) {
-//        this.paymentTransaction = paymentTransaction;
+        this.pT = paymentTransaction;
         this.printedDate = LocalDateTime.now();
     }
 
-//    public String getReceiptNo() {
-//        return receiptNo;
-//    }
-
     public PaymentTransaction getPaymentTransaction() {
-        return paymentTransaction;
+        return pT;
     }
 
     public LocalDateTime getPrintedDate() {
         return printedDate;
     }
 
-    public static void printReceipt(String transactionId, String processedBy, PaymentMethod method, ArrayList<ServiceRequest> requests) {
-
-        // Get current date and time
-        LocalDateTime now = LocalDateTime.now();
+    public void printReceipt(String processedBy, ArrayList<ServiceRequest> requests) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         // Calculate total
@@ -46,10 +39,10 @@ public class Receipt {
         System.out.println("===============================");
         System.out.println("         BARANGAY PAYMENT");
         System.out.println("===============================");
-        System.out.println("Transaction ID : " + transactionId);
-        System.out.println("Date          : " + dtf.format(now));
-        System.out.println("Payment Method: " + method);
-        System.out.println("Processed By  : " + processedBy);
+        System.out.println("Transaction ID : " + pT.getId());
+        System.out.println("Date           : " + dtf.format(printedDate));
+        System.out.println("Payment Method : " + pT.getPaymentMethod());
+        System.out.println("Processed By   : " + processedBy);
         System.out.println("-------------------------------");
         System.out.println("Items Paid:");
 
@@ -59,7 +52,7 @@ public class Receipt {
         }
 
         System.out.println("-------------------------------");
-        System.out.printf("Total Amount: %.2f\n", total);
+        System.out.printf("Total Amount : %.2f\n", total);
         System.out.println("Status      : Paid");
         System.out.println("\nThank you for your payment!");
         System.out.println("===============================");
@@ -67,9 +60,9 @@ public class Receipt {
 
     @Override
     public String toString() {
-        return  "Transaction ID: " + paymentTransaction.getId() +
-                "\nAmount Paid: " + paymentTransaction.getAmountPaid() +
-                "\nPayment Method: " + paymentTransaction.getPaymentMethod() +
+        return  "Transaction ID: " + pT.getId() +
+                "\nAmount Paid: " + pT.getAmountPaid() +
+                "\nPayment Method: " + pT.getPaymentMethod() +
                 "\nPrinted Date: " + printedDate;
     }
 }
