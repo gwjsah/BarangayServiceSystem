@@ -3,6 +3,8 @@ import java.util.Scanner;
 
 import Models.Resident;
 import Models.Staff;
+import Services.ResidentService;
+import Services.StaffService;
 
 public class Main {
     public static void main(String[] args) {
@@ -25,15 +27,17 @@ public class Main {
 
             switch (choice) {
                 case 1 -> {
-                    Resident user = Resident.loginPage();
-                    if (user != null) {
-                        user.mainMenu();  // type is already guaranteed by loginPage
+                    Resident resident = Resident.loginPage();
+                    if (resident != null) {
+                        ResidentService residentService = new ResidentService(resident);
+                        residentService.mainMenu();
                     }
                 }
                 case 2 -> {
                     Staff staff = Staff.loginPage();
                     if (staff != null) {
-                        staff.mainMenu();
+                        StaffService staffService = new StaffService(staff);
+                        staffService.mainMenu();
                     }
                 }
                 case 0 -> System.exit(0);

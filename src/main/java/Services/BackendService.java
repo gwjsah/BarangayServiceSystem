@@ -1,4 +1,4 @@
-package Service;
+package Services;
 
 import Models.*;
 import Models.Enums.RequestStatus;
@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URLEncoder;
@@ -627,6 +628,69 @@ public final class BackendService {
             return account;
         }
 
+    }
+
+    //  --- Reset json database ---
+
+    public static void resetDatabase() {
+        String defaultJson = """
+    {
+      "accounts": [
+        {
+          "email": "resident1@email.com",
+          "id": "0001",
+          "name": "Juan Dela Cruz",
+          "address": "123 Barangay Street",
+          "contactNumber": "09123456789",
+          "userType": "resident",
+          "requestIdList": []
+        },
+        {
+          "email": "resident2@email.com",
+          "id": "0002",
+          "name": "Ana Santos",
+          "address": "456 Barangay Avenue",
+          "contactNumber": "09987654321",
+          "userType": "resident",
+          "requestIdList": []
+        },
+        {
+          "email": "staff1@email.com",
+          "id": "S001",
+          "name": "Jepoy Dizon",
+          "contactNumber": "09223334444",
+          "userType": "staff"
+        }
+      ],
+      "serviceTypes": [
+        {"serviceTypeId": "1", "name": "Barangay Clearance", "baseFee": 50, "id": "4737"},
+        {"serviceTypeId": "2", "name": "Business Permit", "baseFee": 100, "id": "a612"},
+        {"serviceTypeId": "3", "name": "Complaint", "baseFee": 0, "id": "b385"}
+      ],
+      "requirements": [
+        {"requirementId": "r1", "serviceTypeId": "1", "name": "Valid ID", "description": "Any government-issued ID", "isRequired": true, "id": "1c75"},
+        {"requirementId": "r2", "serviceTypeId": "1", "name": "Application Form", "description": "Filled Barangay Clearance form", "isRequired": true, "id": "d552"},
+        {"requirementId": "r3", "serviceTypeId": "2", "name": "Business Form", "description": "Completed Business Permit form", "isRequired": true, "id": "bc40"},
+        {"requirementId": "r4", "serviceTypeId": "2", "name": "Valid ID", "description": "Owner's government-issued ID", "isRequired": true, "id": "d77d"},
+        {"requirementId": "r5", "serviceTypeId": "3", "name": "Complaint Form", "description": "Describe your complaint", "isRequired": true, "id": "82d8"}
+      ],
+      "records": [],
+      "approvalDecisions": [],
+      "requestValidator": [],
+      "schedules": [],
+      "statusHistory": [],
+      "$schema": "./node_modules/json-server/schema.json"
+    }
+    """;
+
+        try (FileWriter file = new FileWriter("data.json")) {
+            file.write(defaultJson);
+            file.flush();
+            System.out.println("Database has been reset to default state.");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Failed to reset database.");
+        }
     }
 
 }

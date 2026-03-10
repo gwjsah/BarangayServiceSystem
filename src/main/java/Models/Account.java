@@ -1,6 +1,6 @@
 package Models;
 
-import Service.BackendService;
+import Services.BackendService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.IOException;
@@ -25,8 +25,15 @@ public abstract class Account {
     public void displayRequestStatusHistory(String requestId) throws IOException, InterruptedException {
         ArrayList<StatusHistory> statusHistories = BackendService.getStatusHistoriesByRequestId(requestId);
 
-        for (StatusHistory sH : statusHistories) {
+        if (statusHistories.isEmpty()) {
+            System.out.println("No status history found for this request");
+        } else {
+            System.out.println("\n--- Request Status History ---");
+        }
 
+        for (StatusHistory sH : statusHistories) {
+            sH.displayHistory();
+            System.out.println();
         }
     }
 }

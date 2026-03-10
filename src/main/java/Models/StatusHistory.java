@@ -13,24 +13,27 @@ public class StatusHistory {
     private RequestStatus previousStatus;
     private RequestStatus newStatus;
     private String remarks;
-    private String changedBy;
+    private String updatedBy;
+    private String dateUpdated;
 
     public StatusHistory() { }
 
-    public StatusHistory(String requestId, RequestStatus previousStatus, RequestStatus newStatus, String remarks, String changedBy) {
+    public StatusHistory(String requestId, RequestStatus previousStatus, RequestStatus newStatus, String remarks, String changedBy, String dateUpdated) {
         this.id = UUID.randomUUID().toString();
         this.serviceRequestId = requestId;
         this.previousStatus = previousStatus;
         this.newStatus = newStatus;
         this.remarks = remarks;
-        this.changedBy = changedBy;
+        this.updatedBy = changedBy;
+        this.dateUpdated = dateUpdated;
     }
 
     public void displayHistory() {
         System.out.println("Request ID: " + serviceRequestId);
         System.out.println("From: " + previousStatus + " → To: " + newStatus);
         System.out.println("Remarks: " + remarks);
-        System.out.println("Changed By: " + changedBy);
+        System.out.println("Updated By: " + updatedBy);
+        System.out.println("Date Updated: " + dateUpdated);
     }
 
     public String getId() {
@@ -68,10 +71,13 @@ public class StatusHistory {
         this.remarks = remarks; 
     }
 
-    public String getChangedBy() {
-        return changedBy; 
+    public String getUpdatedBy() {
+        return updatedBy;
     }
-    public void setChangedBy(String changedBy) {
-        this.changedBy = changedBy; 
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
     }
+
+    public String getDateChanged() { return dateUpdated; }
+    public void setDateChanged(String dateUpdated) { this.dateUpdated = dateUpdated; }
 }
