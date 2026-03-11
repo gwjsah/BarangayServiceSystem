@@ -34,7 +34,6 @@ public String getTicketId() {
     public void setTicketId(String ticketId) {
         this.ticketId = ticketId;
     }
-    
     public String getQueueNumber() {
         return queueNumber;
     }

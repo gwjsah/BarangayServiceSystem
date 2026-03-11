@@ -1,0 +1,107 @@
+{
+  "accounts": [
+    {
+      "email": "resident1@email.com",
+      "id": "0001",
+      "firstName": "Juan",
+      "lastName": "Dela Cruz",
+      "address": "123 Barangay Street",
+      "contactNumber": "09123456789",
+      "userType": "resident",
+      "requestIdList": [
+        "c04618b7-a24b-43a0-82df-ff86fd19056e",
+        "e5e9f7d6-0270-469a-a860-b876a2bf4d84"
+      ],
+      "name": "Juan Dela Cruz",
+      "senior": false
+    },
+    {
+      "email": "resident2@email.com",
+      "id": "0002",
+      "firstName": "Ana",
+      "lastName": "Santos",
+      "address": "456 Barangay Avenue",
+      "contactNumber": "09987654321",
+      "userType": "resident",
+      "requestIdList": [],
+      "name": "Ana Santos",
+      "senior": true
+    },
+    {
+      "email": "staff1@email.com",
+      "id": "S001",
+      "firstName": "Jepoy",
+      "lastName": "Dizon",
+      "contactNumber": "09223334444",
+      "userType": "staff"
+    }
+  ],
+  "serviceTypes": [
+    {
+      "serviceTypeId": "1",
+      "name": "Barangay Clearance",
+      "baseFee": 50,
+      "id": "4737"
+    },
+    {
+      "serviceTypeId": "2",
+      "name": "Business Permit",
+      "baseFee": 100,
+      "id": "a612"
+    },
+    {
+      "serviceTypeId": "3",
+      "name": "Complaint",
+      "baseFee": 0,
+      "id": "b385"
+    }
+  ],
+  "requirements": [
+    {
+      "requirementId": "r1",
+      "serviceTypeId": "1",
+      "name": "Valid ID",
+      "description": "Any government-issued ID",
+      "isRequired": true,
+      "id": "1c75"
+    },
+    {
+      "requirementId": "r2",
+      "serviceTypeId": "1",
+      "name": "Application Form",
+      "description": "Filled Barangay Clearance form",
+      "isRequired": true,
+      "id": "d552"
+    },
+    {
+      "requirementId": "r3",
+      "serviceTypeId": "2",
+      "name": "Business Form",
+      "description": "Completed Business Permit form",
+      "isRequired": true,
+      "id": "bc40"
+    },
+    {
+      "requirementId": "r4",
+      "serviceTypeId": "2",
+      "name": "Valid ID",
+      "description": "Owner's government-issued ID",
+      "isRequired": true,
+      "id": "d77d"
+    },
+    {
+      "requirementId": "r5",
+      "serviceTypeId": "3",
+      "name": "Complaint Form",
+      "description": "Describe your complaint",
+      "isRequired": true,
+      "id": "82d8"
+    }
+  ],
+  "records": [],
+  "approvalDecisions": [],
+  "requestValidator": [],
+  "schedules": [],
+  "statusHistory": [],
+  "$schema": "./node_modules/json-server/schema.json"
+}
