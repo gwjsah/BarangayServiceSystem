@@ -26,7 +26,7 @@ public class Receipt {
         return printedDate;
     }
 
-    public void printReceipt(String processedBy, ArrayList<ServiceRequest> requests) {
+    public void printReceipt(String processedBy, ArrayList<ServiceRequest> requests, boolean withDiscount) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         // Calculate total
@@ -52,8 +52,13 @@ public class Receipt {
         }
 
         System.out.println("-------------------------------");
-        System.out.printf("Total Amount : %.2f\n", total);
-        System.out.println("Status      : Paid");
+        System.out.printf("Total Amount   : %.2f\n", total);
+
+        if (withDiscount) {
+            System.out.printf("Discount       : 40%%\n", total);
+        }
+
+        System.out.println("Status         : Paid");
         System.out.println("\nThank you for your payment!");
         System.out.println("===============================");
     }

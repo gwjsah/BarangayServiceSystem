@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class ResidentService {
+public final class ResidentService {
     private static final Scanner sc = new Scanner(System.in);
     private Resident resident;
 
@@ -42,7 +42,6 @@ public class ResidentService {
 
             switch (option) {
                 case 1:
-                    System.out.println("Listing requests for " + resident.getName());
                     displayReportsByResident();
                     break;
                 case 2:
@@ -136,6 +135,8 @@ public class ResidentService {
 
     public void payAllMenu(ArrayList<ServiceRequest> requests) {
         try {
+            int option = -1;
+
             PaymentMethod pM;
 
             System.out.println("\n--- Full Payment ---");
@@ -144,6 +145,10 @@ public class ResidentService {
 
             for (ServiceRequest req : requests) {
                 fullBalance += req.getFee();
+            }
+
+            if (resident.isSenior()) {
+                fullBalance = FeeCalculator.calculateWithDiscount(fullBalance, 0.6);
             }
 
             System.out.println("Fee: " + fullBalance);
@@ -156,7 +161,13 @@ public class ResidentService {
                     "\n" +
                     "Select option: ");
 
-            int option = sc.nextInt();
+            try {
+                option = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a number.");
+                sc.nextLine();
+            }
 
             switch (option) {
                 case 1 -> pM = PaymentMethod.cash;
@@ -191,6 +202,11 @@ public class ResidentService {
 
                 System.out.println("Payment Successful! Status updated to Paid");
 
+                for (ServiceRequest req : requests) {
+                    StatusHistory sH = new StatusHistory(req.getId(), RequestStatus.approved, RequestStatus.paid, "Request paid by resident.", resident.getName(), java.time.LocalDate.now().toString());
+                    BackendService.saveStatusHistory(sH);
+                }
+
                 System.out.print("Do you want a receipt? (Y/N): ");
                 input = sc.next().charAt(0);
                 sc.nextLine();
@@ -198,7 +214,7 @@ public class ResidentService {
                 if (Character.toLowerCase(input) == 'y') {
                     Receipt receipt = new Receipt(pT);
 //                    int transactionId, String processedBy, PaymentMethod method, ArrayList<ServiceRequest> requests
-                    receipt.printReceipt( "Barangay Office", requests);
+                    receipt.printReceipt( "Barangay Office", requests, resident.isSenior());
                 }
             } else {
                 pT.cancelPayment();
@@ -213,7 +229,13 @@ public class ResidentService {
 
     public void paySingleMenu(ServiceRequest request) {
         try {
+            int option = -1;
+
             PaymentMethod pM;
+
+            if (resident.isSenior()) {
+                request.setFee(FeeCalculator.calculateWithDiscount(request, 0.6));
+            }
 
             System.out.println("\n--- Single Payment ---");
             System.out.println("Request: " + request.getServiceName());
@@ -228,7 +250,13 @@ public class ResidentService {
                     "\n" +
                     "Select option: ");
 
-            int option = sc.nextInt();
+            try {
+                option = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a number.");
+                sc.nextLine();
+            }
 
             switch (option) {
                 case 1 -> pM = PaymentMethod.cash;
@@ -275,7 +303,7 @@ public class ResidentService {
 
                     Receipt receipt = new Receipt(pT);
 //                    int transactionId, String processedBy, PaymentMethod method, ArrayList<ServiceRequest> requests
-                    receipt.printReceipt("Barangay Office", requestList);
+                    receipt.printReceipt("Barangay Office", requestList, resident.isSenior());
                 }
             } else {
                 pT.cancelPayment();
@@ -289,11 +317,13 @@ public class ResidentService {
     }
 
     public void submitRequest(Resident user) {
+        Scanner sc = new Scanner(System.in);
+
         try {
             String serviceName = "";
             double serviceFee = 0;
 
-            // display all available services
+            // Display all available services
             ArrayList<ServiceType> services = BackendService.getServiceTypes();
 
             System.out.println("\n--- Submit Request Menu ---");
@@ -304,12 +334,25 @@ public class ResidentService {
             System.out.println("0) Return");
 
             // Ask resident to select a service
-            Scanner sc = new Scanner(System.in);
-            System.out.print("Enter Service ID to request: ");
-            String selectedServiceId = sc.nextLine();
+            String selectedServiceId = "";
+            boolean validInput = false;
+
+            while (!validInput) {
+                System.out.print("Enter Service ID to request: ");
+                selectedServiceId = sc.nextLine().trim();
+
+                // Only accept 1, 2, 3, or 0
+                if (selectedServiceId.equals("0") || selectedServiceId.equals("1") ||
+                        selectedServiceId.equals("2") || selectedServiceId.equals("3")) {
+                    validInput = true;
+                } else {
+                    System.out.println("Invalid input. Please enter 1, 2, 3, or 0.");
+                }
+            }
 
             if (selectedServiceId.equals("0")) return;
 
+            // Match selected service
             for (ServiceType s : services) {
                 if (selectedServiceId.equals(s.getServiceTypeId())) {
                     serviceName = s.getName();
@@ -328,8 +371,16 @@ public class ResidentService {
             System.out.print("Enter purpose of your request: ");
             String purpose = sc.nextLine();
 
-            // Create a ServiceReqest object
-            ServiceRequest req = new ServiceRequest(serviceName, selectedServiceId, user.getName(), user.getId(), purpose, java.time.LocalDate.now().toString(), serviceFee);
+            // Create a ServiceRequest object
+            ServiceRequest req = new ServiceRequest(
+                    serviceName,
+                    selectedServiceId,
+                    user.getName(),
+                    user.getId(),
+                    purpose,
+                    java.time.LocalDate.now().toString(),
+                    serviceFee
+            );
 
             // Add request to backend records
             BackendService.insertServiceRequest(req);
@@ -338,13 +389,20 @@ public class ResidentService {
             user.getRequestIdList().add(req.getId());
             BackendService.updateResident(user);
 
-            StatusHistory sH = new StatusHistory(req.getId(), null, RequestStatus.pending, "New request added.", resident.getName(), java.time.LocalDate.now().toString());
+            StatusHistory sH = new StatusHistory(
+                    req.getId(),
+                    null,
+                    RequestStatus.pending,
+                    "New request added.",
+                    user.getName(),
+                    java.time.LocalDate.now().toString()
+            );
             BackendService.saveStatusHistory(sH);
 
             System.out.println("Request submitted successfully! Your request ID: " + req.getId());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Request submission failed: " + e.getMessage());
         }
     }
 
@@ -367,16 +425,19 @@ public class ResidentService {
 
 
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.out.println("No scheduled requests found.");
         }
     }
 
     public void viewRejectedRequest() {
         try {
+            int option = -1;
+
             ArrayList<ServiceRequest> requests = BackendService.getRequestsByStatus(RequestStatus.rejected);
 
             if (requests.isEmpty()) {
-                System.out.println("No scheduled requests found.");
+                System.out.println("No rejected requests found.");
                 return;
             }
 
@@ -389,8 +450,14 @@ public class ResidentService {
             }
 
             System.out.print("Select request number to view details, or 0 to return: ");
-            int option = sc.nextInt();
-            sc.nextLine();
+
+            try {
+                option = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a number.");
+                sc.nextLine();
+            }
 
             if (option > 0 && option <= requests.size()) {
                 ServiceRequest sR = requests.get(option - 1);
@@ -404,13 +471,16 @@ public class ResidentService {
                 System.out.println("Invalid selection.");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.out.println("No rejected requests found.");
         }
     }
 
     public void displayStatusHistoryMenu() {
 
         try {
+            int option = -1;
+
             ArrayList<ServiceRequest> requests = BackendService.getRequestsByResident(resident.getId());
 
             if (requests.isEmpty()) {
@@ -426,8 +496,14 @@ public class ResidentService {
             }
 
             System.out.print("Select request number to view status history, or 0 to return: ");
-            int option = sc.nextInt();
-            sc.nextLine();
+
+            try {
+                option = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a number.");
+                sc.nextLine();
+            }
 
 
             if (option > 0 && option <= requests.size()) {
@@ -440,7 +516,8 @@ public class ResidentService {
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.out.println("No rejected requests found.");
         }
     }
 }

@@ -1,25 +1,56 @@
 package Models;
 
-import Models.Enums.RequestStatus;
 import Models.Enums.UserType;
 import Services.BackendService;
-import Services.StaffService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Scanner;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Staff extends Account {
+public class Staff extends Account{
     private static final Scanner sc = new Scanner(System.in);
 
-    private String name;
+    private String firstName;
+    private String lastName;
+    private String contactNumber;
     private UserType userType;
 
     public Staff() { }
 
-    public String getName() { return name; }
+    public void displayInfo() {
+        System.out.println("temp.Staff ID: " + this.getId());
+        System.out.println("Name: " + this.getFirstName() + " " + this.getLastName());
+        System.out.println("Contact Number: " + this.getContactNumber());
+        System.out.println("Email: " + this.getEmail());
+    }
 
-    public void setName(String name) { this.name = name; }
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    public String getName() {
+        return firstName + " " + lastName;
+    }
 
     public UserType getUserType() { return userType; }
 
@@ -47,6 +78,4 @@ public class Staff extends Account {
         }
         return null;
     }
-
-
 }

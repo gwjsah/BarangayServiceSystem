@@ -3,12 +3,9 @@ package Services;
 import Models.*;
 import Models.Enums.RequestStatus;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
-public class StaffService {
+public final class StaffService {
     private static final Scanner sc = new Scanner(System.in);
     private Staff staff;
 
@@ -20,6 +17,8 @@ public class StaffService {
         boolean loggedIn = true;
 
         while (loggedIn) {
+            int option = -1;
+
             System.out.println("\n--- Staff Dashboard ---");
             System.out.println("1) View All Requests");
             System.out.println("2) View Pending Requests (for validation)");
@@ -29,9 +28,14 @@ public class StaffService {
             System.out.println("6) Delete Request");
             System.out.println("0) Logout");
 
-            System.out.print("Select an option: ");
-            int option = sc.nextInt();
-            sc.nextLine();
+            try {
+                System.out.print("Select an option: ");
+                option = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a number.");
+                sc.nextLine();
+            }
 
             switch (option) {
                 case 1:
@@ -65,6 +69,8 @@ public class StaffService {
     public void displayAllReports() {
         try {
             while (true) {
+                int option = -1;
+
                 ArrayList<ServiceRequest> requests = BackendService.getServiceRequest();
 
                 if (requests.isEmpty()) {
@@ -80,8 +86,14 @@ public class StaffService {
                 }
 
                 System.out.print("Select request number to view details, or 0 to return: ");
-                int option = sc.nextInt();
-                sc.nextLine();
+
+                try {
+                    option = sc.nextInt();
+                    sc.nextLine();
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input! Please enter a number.");
+                    sc.nextLine();
+                }
 
 
                 if (option > 0 && option <= requests.size()) {
@@ -102,6 +114,8 @@ public class StaffService {
     public void displayAllReportsByStatus(RequestStatus status) {
         try {
             while (true) {
+                int option = -1;
+
                 ArrayList<ServiceRequest> requests = BackendService.getRequestsByStatus(status);
 
                 if (requests.isEmpty()) {
@@ -120,8 +134,14 @@ public class StaffService {
                 }
 
                 System.out.print("Select request number to view details, or 0 to return: ");
-                int option = sc.nextInt();
-                sc.nextLine();
+
+                try {
+                    option = sc.nextInt();
+                    sc.nextLine();
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input! Please enter a number.");
+                    sc.nextLine();
+                }
 
 
                 if (option > 0 && option <= requests.size()) {
@@ -141,6 +161,8 @@ public class StaffService {
 
     public void viewRequestDetails(ServiceRequest request) {
         while(true) {
+            int option = -1;
+
             System.out.println("\n--- Request Details ---");
             System.out.println("Resident Name: " + request.getResidentName());
             System.out.println("Service: " + request.getServiceName());
@@ -156,8 +178,14 @@ public class StaffService {
                 System.out.println("0) Back");
             }
             System.out.print("Enter option: ");
-            int option = sc.nextInt();
-            sc.nextLine();
+
+            try {
+                option = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a number.");
+                sc.nextLine();
+            }
 
             switch (option) {
                 case 1:
@@ -246,11 +274,19 @@ public class StaffService {
 
     public void displayStatusOptions() {
         while (true) {
+            int option = -1;
+
             System.out.println("\n--- Filter Requests ---");
             System.out.println("1) Pending\n2) Approved\n3) Rejected\n4) Paid\n5) Scheduled\n6) Completed\n0) Return");
             System.out.print("Select an option: ");
-            int option = sc.nextInt();
-            sc.nextLine();
+
+            try {
+                option = sc.nextInt();
+                sc.nextLine();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a number.");
+                sc.nextLine();
+            }
 
             RequestStatus status = null;
 
@@ -288,6 +324,8 @@ public class StaffService {
     public void selectRequestToSchedule() {
         try {
             while (true) {
+                int option = -1;
+
                 ArrayList<ServiceRequest> requests = BackendService.getRequestsByStatus(RequestStatus.paid);
 
                 if (requests.isEmpty()) {
@@ -305,8 +343,14 @@ public class StaffService {
                 }
 
                 System.out.print("Select request number to schedule, or 0 to return: ");
-                int option = sc.nextInt();
-                sc.nextLine();
+
+                try {
+                    option = sc.nextInt();
+                    sc.nextLine();
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input! Please enter a number.");
+                    sc.nextLine();
+                }
 
                 if (option > 0 && option <= requests.size()) {
                     ServiceRequest sr = requests.get(option - 1);
@@ -359,6 +403,8 @@ public class StaffService {
     public void assignCompleteStatus() {
         try {
             while (true) {
+                int option = -1;
+
                 ArrayList<ServiceRequest> requests = BackendService.getRequestsByStatus(RequestStatus.scheduled);
 
                 if (requests.isEmpty()) {
@@ -376,8 +422,14 @@ public class StaffService {
                 }
 
                 System.out.print("Select request number to mark as completed, or 0 to return: ");
-                int option = sc.nextInt();
-                sc.nextLine();
+
+                try {
+                    option = sc.nextInt();
+                    sc.nextLine();
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input! Please enter a number.");
+                    sc.nextLine();
+                }
 
                 if (option > 0 && option <= requests.size()) {
                     ServiceRequest sr = requests.get(option - 1);
@@ -426,6 +478,8 @@ public class StaffService {
     public void deleteRequest() {
         try {
             while (true) {
+                int option = -1;
+
                 ArrayList<ServiceRequest> requests = new ArrayList<>();
 
                 requests.addAll(BackendService.getRequestsByStatus(RequestStatus.completed));
@@ -446,8 +500,14 @@ public class StaffService {
                 }
 
                 System.out.print("Select request number to delete, or 0 to return: ");
-                int option = sc.nextInt();
-                sc.nextLine();
+
+                try {
+                    option = sc.nextInt();
+                    sc.nextLine();
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input! Please enter a number.");
+                    sc.nextLine();
+                }
 
                 if (option > 0 && option <= requests.size()) {
                     System.out.println("You are about to permanently delete:\n");
@@ -504,84 +564,4 @@ public class StaffService {
     }
 }
 
-//    public void makeDecision(ServiceRequest request) {
-//        System.out.println("\n--- Approval Decision ---");
-//        System.out.println("1) Approve");
-//        System.out.println("2) Reject");
-//        System.out.println("0) Cancel");
-//        System.out.print("Select Option: ");
-//        int option = sc.nextInt();
-//        sc.nextLine();
-//
-//        if (option == 0) {
-//            return;
-//        }
-//
-//        try {
-//            ApprovalDecision decision = new ApprovalDecision(java.util.UUID.randomUUID().toString(), request.getId(), this.getName());
-//
-//            System.out.print("Enter remarks: ");
-//            String remarks = sc.nextLine();
-//
-//            if (option == 1) {
-//                decision.approve(remarks);
-//                request.setStatus(RequestStatus.approved);
-//            } else if (option == 2) {
-//                decision.reject(remarks);
-//                request.setStatus(RequestStatus.rejected);
-//            } else {
-//                System.out.println("Invalid option.");
-//                return;
-//            }
-//
-//            BackendService.saveApprovalDecision(decision);
-//
-//            BackendService.updateServiceRequest(request);
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void updateReport(ServiceRequest request) {
-//        System.out.println("\n--- Update Request Status ---");
-//        System.out.println("Current Status: " + request.getStatus());
-//        System.out.println("Select new status:");
-//        System.out.println("1) Approved\n2) Rejected\n3) Paid\n4) Scheduled\n5) Completed");
-//
-//        System.out.print("Select Option: ");
-//        int option = sc.nextInt();
-//        sc.nextLine();
-//
-//        switch (option) {
-//            case 1:
-//                request.setStatus(RequestStatus.approved);
-//                break;
-//            case 2:
-//                request.setStatus(RequestStatus.rejected);
-//                break;
-//            case 3:
-//                request.setStatus(RequestStatus.paid);
-//                break;
-//            case 4:
-//                if (request.getStatus().equals(RequestStatus.paid)) {
-//                    request.setStatus(RequestStatus.scheduled);
-//                    break;
-//                }
-//                System.out.println("Request must be paid mark it as scheduled.");
-//                break;
-//            case 5:
-//                if (request.getStatus().equals(RequestStatus.paid)) {
-//                    request.setStatus(RequestStatus.completed);
-//                    break;
-//                }
-//                System.out.println("Request must be paid for it to be marked as completed");
-//                break;
-//            default:
-//                System.out.println("Invalid option. Try again.");
-//        }
-//        try {
-//            BackendService.updateServiceRequest(request);
-//        } catch (IOException | InterruptedException ex) {
-//            throw new RuntimeException(ex);
-//        }
-//    }
+

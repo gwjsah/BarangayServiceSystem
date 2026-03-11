@@ -1,45 +1,90 @@
 package Models;
 
-import Models.Enums.PaymentMethod;
-import Models.Enums.RequestStatus;
 import Models.Enums.UserType;
 import Services.BackendService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
-
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Resident extends Account {
+public class Resident extends  Account{
     private static final Scanner sc = new Scanner(System.in);
 
-    private String name;
+    private String firstName;
+    private String lastName;
     private String address;
     private String contactNumber;
     private UserType userType;
+    private boolean isSenior;
     protected ArrayList<String> requestIdList = new ArrayList<>();
 
     public Resident() { }
 
-    // --- Setters and Getters ---
+    public void displayInfo() {
+        System.out.println("Resident ID: " + this.getId());
+        System.out.println("Name: " + this.getFirstName() + " " + this.getLastName());
+        System.out.println("Address: " + this.getAddress());
+        System.out.println("Contact Number: " + this.getContactNumber());
+    }
 
-    public String getName() { return name; }
+    // -- Resident Name ---
 
-    public void setName(String name) { this.name = name; }
+    public String getFirstName() {
+        return firstName;
+    }
 
-    public String getAddress() { return address; }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-    public void setAddress(String address) { this.address = address; }
+    public String getLastName() {
+        return lastName;
+    }
 
-    public String getContactNumber() { return contactNumber; }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-    public void setContactNumber(String contactNumber) { this.contactNumber = contactNumber; }
+    // -- Resident Address ---
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    // -- Resident Contact Number ---
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    // -- Resident Name ---
+
+    public String getName() {
+        return this.getFirstName() + " " + this.getLastName();
+    }
+
+    // -- Resident UserType ---
 
     public UserType getUserType() { return userType; }
 
     public void setUserType(UserType userType) { this.userType = userType; }
+
+    // -- Resident Senior ---
+
+    public boolean isSenior() { return isSenior; }
+
+    public void setSenior(boolean senior) { isSenior = senior; }
+
+    // -- Resident RefID List ---
 
     public ArrayList<String> getRequestIdList() { return requestIdList; }
 
@@ -70,6 +115,4 @@ public class Resident extends Account {
 
         return null;
     }
-
-
 }

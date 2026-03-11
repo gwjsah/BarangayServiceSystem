@@ -6,6 +6,7 @@ import Models.Enums.UserType;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import temp.ApprovalDecision;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -65,12 +66,12 @@ public final class BackendService {
         if (response.statusCode() != 201) throw new IOException("Failed to create account");
     }
 
-    public static void updateResident(Resident Resident) throws IOException, InterruptedException {
+    public static void updateResident(Resident resident) throws IOException, InterruptedException {
         ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(Resident);
+        String json = mapper.writeValueAsString(resident);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:3000/accounts/" + Resident.getId()))
+                .uri(URI.create("http://localhost:3000/accounts/" + resident.getId()))
                 .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(json))
                 .build();
@@ -639,7 +640,8 @@ public final class BackendService {
         {
           "email": "resident1@email.com",
           "id": "0001",
-          "name": "Juan Dela Cruz",
+          "firstName": "Juan",
+          "lastName": "Dela Cruz",
           "address": "123 Barangay Street",
           "contactNumber": "09123456789",
           "userType": "resident",
@@ -648,7 +650,8 @@ public final class BackendService {
         {
           "email": "resident2@email.com",
           "id": "0002",
-          "name": "Ana Santos",
+          "firstName": "Ana",
+          "lastName": "Santos",
           "address": "456 Barangay Avenue",
           "contactNumber": "09987654321",
           "userType": "resident",
@@ -657,7 +660,8 @@ public final class BackendService {
         {
           "email": "staff1@email.com",
           "id": "S001",
-          "name": "Jepoy Dizon",
+          "firstName": "Jepoy",
+          "lastName": Dizon",
           "contactNumber": "09223334444",
           "userType": "staff"
         }
