@@ -1,37 +1,31 @@
 {
   "accounts": [
     {
-      "email": "resident1@email.com",
       "id": "0001",
-      "firstName": "Juan",
-      "lastName": "Dela Cruz",
-      "address": "123 Barangay Street",
+      "email": "resident1@email.com",
+      "name": "Juan Dela Cruz",
       "contactNumber": "09123456789",
       "userType": "resident",
+      "address": "123 Barangay Street",
       "requestIdList": [
-        "c04618b7-a24b-43a0-82df-ff86fd19056e",
-        "e5e9f7d6-0270-469a-a860-b876a2bf4d84"
+        "0d2f9d5c-f2e6-4e7e-8b63-3db435550dc7"
       ],
-      "name": "Juan Dela Cruz",
       "senior": false
     },
     {
       "email": "resident2@email.com",
       "id": "0002",
-      "firstName": "Ana",
-      "lastName": "Santos",
+      "name": "Ana Santos",
       "address": "456 Barangay Avenue",
       "contactNumber": "09987654321",
       "userType": "resident",
       "requestIdList": [],
-      "name": "Ana Santos",
       "senior": true
     },
     {
       "email": "staff1@email.com",
       "id": "S001",
-      "firstName": "Jepoy",
-      "lastName": "Dizon",
+      "name": "Jepoy Dizon",
       "contactNumber": "09223334444",
       "userType": "staff"
     }
@@ -101,7 +95,6 @@
   "records": [],
   "approvalDecisions": [],
   "requestValidator": [],
-  "schedules": [],
   "statusHistory": [],
   "$schema": "./node_modules/json-server/schema.json"
 }
