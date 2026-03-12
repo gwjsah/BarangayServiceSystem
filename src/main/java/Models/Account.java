@@ -1,7 +1,10 @@
 package Models;
 
+import Models.Enums.UserType;
 import Services.BackendService;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,9 +13,26 @@ import java.util.ArrayList;
 public abstract class Account {
 
     private String email;
-    private String id;
+    private final String id;
+    private final String name;
+    private String contactNumber;
+    private final UserType userType;
 
-    public Account() { }
+    @JsonCreator
+    public Account(
+            @JsonProperty("id") String id,
+            @JsonProperty("email") String email,
+            @JsonProperty("name") String name,
+            @JsonProperty("contactNumber") String contactNumber,
+            @JsonProperty("userType") UserType userType
+    ) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.contactNumber = contactNumber;
+        this.userType = userType;
+    }
+
 
     public String getEmail() { return email; }
 
@@ -20,7 +40,13 @@ public abstract class Account {
 
     public String getId() { return id; }
 
-    public void setId(String id) { this.id = id; }
+    public String getName() { return name; }
+
+    public String getContactNumber() { return contactNumber; }
+
+    public void setContactNumber(String contactNumber) { this.contactNumber = contactNumber; }
+
+    public UserType getUserType() { return userType; }
 
     public void displayRequestStatusHistory(String requestId) throws IOException, InterruptedException {
         ArrayList<StatusHistory> statusHistories = BackendService.getStatusHistoriesByRequestId(requestId);

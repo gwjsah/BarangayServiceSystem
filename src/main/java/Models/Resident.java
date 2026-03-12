@@ -3,6 +3,7 @@ package Models;
 import Models.Enums.UserType;
 import Services.BackendService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -11,39 +12,29 @@ import java.util.Scanner;
 public class Resident extends  Account{
     private static final Scanner sc = new Scanner(System.in);
 
-    private String firstName;
-    private String lastName;
     private String address;
-    private String contactNumber;
-    private UserType userType;
     private boolean isSenior;
     protected ArrayList<String> requestIdList = new ArrayList<>();
 
-    public Resident() { }
+    public Resident(
+            @JsonProperty("id") String id,
+            @JsonProperty("email") String email,
+            @JsonProperty("name") String name,
+            @JsonProperty("contactNumber") String contactNumber,
+            @JsonProperty("userType") UserType userType,
+            @JsonProperty("address") String address,
+            @JsonProperty("isSenior") boolean isSenior
+    ) {
+        super(id, email, name, contactNumber, userType);
+        this.address = address;
+        this.isSenior = isSenior;
+    }
 
     public void displayInfo() {
         System.out.println("Resident ID: " + this.getId());
-        System.out.println("Name: " + this.getFirstName() + " " + this.getLastName());
+        System.out.println("Name: " + this.getName());
         System.out.println("Address: " + this.getAddress());
         System.out.println("Contact Number: " + this.getContactNumber());
-    }
-
-    // -- Resident Name ---
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     // -- Resident Address ---
@@ -55,28 +46,6 @@ public class Resident extends  Account{
     public void setAddress(String address) {
         this.address = address;
     }
-
-    // -- Resident Contact Number ---
-
-    public String getContactNumber() {
-        return contactNumber;
-    }
-
-    public void setContactNumber(String contactNumber) {
-        this.contactNumber = contactNumber;
-    }
-
-    // -- Resident Name ---
-
-    public String getName() {
-        return this.getFirstName() + " " + this.getLastName();
-    }
-
-    // -- Resident UserType ---
-
-    public UserType getUserType() { return userType; }
-
-    public void setUserType(UserType userType) { this.userType = userType; }
 
     // -- Resident Senior ---
 

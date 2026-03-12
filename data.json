@@ -1,37 +1,31 @@
 {
   "accounts": [
     {
-      "email": "resident1@email.com",
       "id": "0001",
-      "firstName": "Juan",
-      "lastName": "Dela Cruz",
-      "address": "123 Barangay Street",
+      "email": "resident1@email.com",
+      "name": "Juan Dela Cruz",
       "contactNumber": "09123456789",
       "userType": "resident",
+      "address": "123 Barangay Street",
       "requestIdList": [
-        "c04618b7-a24b-43a0-82df-ff86fd19056e",
-        "e5e9f7d6-0270-469a-a860-b876a2bf4d84"
+        "0d2f9d5c-f2e6-4e7e-8b63-3db435550dc7"
       ],
-      "name": "Juan Dela Cruz",
       "senior": false
     },
     {
       "email": "resident2@email.com",
       "id": "0002",
-      "firstName": "Ana",
-      "lastName": "Santos",
+      "name": "Ana Santos",
       "address": "456 Barangay Avenue",
       "contactNumber": "09987654321",
       "userType": "resident",
       "requestIdList": [],
-      "name": "Ana Santos",
       "senior": true
     },
     {
       "email": "staff1@email.com",
       "id": "S001",
-      "firstName": "Jepoy",
-      "lastName": "Dizon",
+      "name": "Jepoy Dizon",
       "contactNumber": "09223334444",
       "userType": "staff"
     }
@@ -98,10 +92,89 @@
       "id": "82d8"
     }
   ],
-  "records": [],
+  "records": [
+    {
+      "serviceName": "Business Permit",
+      "serviceTypeId": "2",
+      "residentName": "Juan Dela Cruz",
+      "residentId": "0001",
+      "purpose": "asdasdad",
+      "id": "0d2f9d5c-f2e6-4e7e-8b63-3db435550dc7",
+      "dateCreated": "2026-03-12",
+      "status": "completed",
+      "fee": 100,
+      "valid": true
+    }
+  ],
   "approvalDecisions": [],
-  "requestValidator": [],
-  "schedules": [],
-  "statusHistory": [],
+  "requestValidator": [
+    {
+      "id": "b9e6d00a-b01f-434b-8aff-4ec9126bcaa5",
+      "serviceRequestId": "0d2f9d5c-f2e6-4e7e-8b63-3db435550dc7",
+      "remarks": "sdasd",
+      "missingRequirements": [],
+      "valid": true,
+      "complete": true
+    }
+  ],
+  "schedules": [
+    {
+      "id": "e5a9ff1d-fa56-4514-b139-57cc7683d61c",
+      "serviceRequestId": "0d2f9d5c-f2e6-4e7e-8b63-3db435550dc7",
+      "residentName": "Juan Dela Cruz",
+      "date": "2026-03-13",
+      "time": "10:30",
+      "location": "Barangay Hall",
+      "status": "completed",
+      "serviceName": "Business Permit"
+    }
+  ],
+  "statusHistory": [
+    {
+      "id": "cac642ef-2eb5-4a9d-937a-5057d7074399",
+      "previousStatus": null,
+      "newStatus": "pending",
+      "remarks": "New request added.",
+      "updatedBy": "Juan Dela Cruz",
+      "requestId": "0d2f9d5c-f2e6-4e7e-8b63-3db435550dc7",
+      "dateChanged": "2026-03-12"
+    },
+    {
+      "id": "9c6ba6a2-e9b1-4143-942a-893160c03e22",
+      "previousStatus": "pending",
+      "newStatus": "approved",
+      "remarks": "Request approved.",
+      "updatedBy": "Jepoy Dizon",
+      "requestId": "0d2f9d5c-f2e6-4e7e-8b63-3db435550dc7",
+      "dateChanged": "2026-03-12"
+    },
+    {
+      "id": "4d46e4cc-e098-42d3-bcf8-3a7f445f2f47",
+      "previousStatus": "approved",
+      "newStatus": "paid",
+      "remarks": "Request paid by resident.",
+      "updatedBy": "Juan Dela Cruz",
+      "requestId": "0d2f9d5c-f2e6-4e7e-8b63-3db435550dc7",
+      "dateChanged": "2026-03-12"
+    },
+    {
+      "id": "aac4c517-d97e-4feb-a08c-31ac104fac64",
+      "previousStatus": "paid",
+      "newStatus": "scheduled",
+      "remarks": "Request scheduled.",
+      "updatedBy": "Jepoy Dizon",
+      "requestId": "0d2f9d5c-f2e6-4e7e-8b63-3db435550dc7",
+      "dateChanged": "2026-03-12"
+    },
+    {
+      "id": "b0958d00-2a7d-4b41-9663-534001e5315d",
+      "previousStatus": "scheduled",
+      "newStatus": "completed",
+      "remarks": "Request completed.",
+      "updatedBy": "Jepoy Dizon",
+      "requestId": "0d2f9d5c-f2e6-4e7e-8b63-3db435550dc7",
+      "dateChanged": "2026-03-12"
+    }
+  ],
   "$schema": "./node_modules/json-server/schema.json"
 }
